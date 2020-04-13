@@ -1,0 +1,68 @@
+/* miniprogram/pages/addMember/addMember.wxss */
+
+@import "/icon.wxss";
+@import "/colorui.wxss";
+
+Page {
+  background: white;
+  min-height: 100vh;
+  position: absolute;
+  top: 0;
+}
+
+.detail {
+  margin: 30rpx 60rpx;
+}
+
+.label {
+  font-weight: bold;
+  color: #bbbec4;
+  font-size: 0.91rem;
+  margin-bottom: 10rpx;
+}
+
+.people {
+  display: flex;
+  align-items: center;
+  margin: 40rpx 0;
+  border-radius: 20rpx;
+  position: relative;
+}
+
+.icon {
+  width: 1.3rem;
+  height: 1.3rem;
+  /* padding-top: 10rpx; *//* border-radius: 100%;
+  background-color: #f3f3f3;
+  border: 2px solid #bbbec4;
+  overflow: hidden; */
+  margin-right: 20rpx;
+}
+
+.me {
+  position: absolute;
+  right: 20rpx;
+  color: #999ca3;
+  font-weight: bold;
+  font-size: 10pt
+}
+
+.button {
+  margin: 60rpx 70rpx;
+  /* margin-top: 150rpx; */
+  border-radius: 20rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-color: #eee;
+  font-weight: bold;
+  background-color: #eee;
+  position: absolute;
+  bottom: 0;
+  width: 600rpx;
+  font-size: 10pt;
+  color: rgb(207, 11, 11);
+}
+
+

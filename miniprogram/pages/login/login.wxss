@@ -1,0 +1,74 @@
+/* pages/login/login.wxss */
+@import "/icon.wxss";
+@import "/colorui.wxss";
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+  border-radius: 20rpx;
+  margin: -140rpx 10vw 0;
+  padding: 20rpx;
+  box-shadow: 0 8px 12px #ebedf0;
+}
+
+.login-container image {
+  width: 240rpx;
+  height: 240rpx;
+}
+
+.login-container form {
+  width: 75vw;
+  margin: 30rpx auto 40rpx;
+  padding: 15rpx;
+}
+
+.login-btn {
+  background: #0db5f8b6;
+  color: #fff;
+  border-radius: 20rpx;
+  /* height: 72rpx; */
+  /* line-height: 72rpx; */
+  margin: 40rpx 100rpx 30rpx;
+  font-size: 16px;
+  font-weight: 500;
+  width: 350rpx;
+}
+
+.cu-form-group{
+  justify-content: flex-start;
+}
+
+.cu-form-group text {
+  display: inline-block;
+  /* height: 50rpx; */
+  margin-right: 20rpx;
+}
+
+.cu-form-group .picker {
+  height: 100rpx;
+  text-align: left !important; 
+}
+
+
+.cu-form-group .input {
+  text-align: left !important; 
+}
+
+.bg-cover {
+  background-image: url("https://s1.ax1x.com/2020/03/18/8B53GR.png");
+  width: 100vw;
+  height: 60vw;
+  background-size: cover;
+}
+
+.prompt-message {
+  margin: 40rpx 10vw;
+  text-align: center;
+}
+
+.prompt-message text {
+  font-size: 30rpx;
+  color: rgb(158, 158, 158);
+}

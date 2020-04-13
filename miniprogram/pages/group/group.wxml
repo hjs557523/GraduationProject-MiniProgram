@@ -1,0 +1,33 @@
+<view class="cu-custom" style="height:{{CustomBar}}px;">
+  <view class="cu-bar fixed bg-gradual-blue" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+    <navigator class='action' open-type="navigateBack" delta="1" hover-class="none">
+      <text class='icon-back'></text> 返回
+    </navigator>
+    <view class='content' style='top:{{StatusBar}}px;'>创新综合实践</view>
+  </view>
+</view>
+
+
+<view class='padding text-center'>
+  <view class='padding-lr bg-white'>
+    <view class='solid-bottom text-xl text-black padding'>
+    <text class='icon-github lg text-blue'></text>
+    <text class='padding'>已加入的团队</text>
+    </view>
+  </view>
+</view>
+
+
+
+<view class='cardlist'>
+  <view wx:for="{{persondata.teamlist}}" wx:key='_id' class='teamcard' bindtap='bindteamcard' data-id='{{item._id}}' style="{{teamid==item._id?'border:4px solid #bbbec4':''}}">
+    <text>{{item.name}}</text>
+  </view>
+  <view class='teamcard' style='height:0;margin:0;box-shadow:unset'>
+  </view>
+</view>
+
+<view class='bottombutton'>
+  <van-button block icon='/images/icons8-github3.svg' bind:click='teammode' color="grey" plain>点击创建团队</van-button>
+</view>
+

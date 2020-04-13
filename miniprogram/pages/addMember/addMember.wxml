@@ -1,0 +1,59 @@
+<view class="cu-custom" style="height:{{CustomBar}}px;">
+  <view class="cu-bar fixed bg-gradual-pink" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+    <navigator class='action' open-type="navigateBack" delta="1" hover-class="none">
+      <text class='icon-back'></text> 返回
+    </navigator>
+    <view class='content' style='top:{{StatusBar}}px;'>创新综合实践</view>
+  </view>
+</view>
+
+<view class='padding text-center'>
+  <view class='padding-lr bg-white'>
+    <view class='solid-bottom text-xl text-black padding'>
+      <text class='padding text-bold'>添加成员</text>
+    </view>
+  </view>
+</view>
+
+
+<view class='detail' bindtap='{{show.owner==show.openid?"bindbottom":""}}'>
+  <view class='label'>Team Name
+    <!-- <van-icon wx:if='{{show.owner==show.openid}}' name="edit" size='0.8rem' /> -->
+    <text class='icon-edit lg text-grey' wx:if='{{show.owner==show.openid}}'> </text>
+  </view>
+  <view class='name'>{{show.name}}</view>
+</view>
+<van-popup show="{{ popbottom }}" position="top" round custom-style="height: 200rpx;padding:60rpx" bind:close="bindbottom">
+  <van-field custom-style='background-color:#f7f7f7' left-icon='/images/teamicon.svg' clearable placeholder="队伍名（≤10）" confirm-type="done" bind:confirm='bindteam' maxlength='10' border="{{false}}" bind:change='inputchange' data-name='team' value="{{team}}"
+  />
+</van-popup>
+
+
+<view class='detail'>
+  <view class='label'>团队导师</view>
+  <view class='people'>
+    <!-- <view class='icon'> -->
+    <image src='/images/user.svg' class='icon'></image>
+    <!-- </view> -->
+    <view>{{ show.teacher.name }}</view>
+  </view>
+</view>
+
+
+
+<view class='detail'>
+  <view class='label'>成员列表</view>
+  <view class='people' wx:for="{{show.people}}" wx:key="index">
+    <!-- <view class='icon'> -->
+    <image src='/images/user.svg' class='icon'></image>
+    <!-- </view> -->
+    <view>{{item.name}}</view>
+    <view class='me' wx:if="{{item.openid==show.openid}}">我</view>
+  </view>
+  <!-- <van-icon name="plus" size='1.2rem' /> -->
+  <van-button size='small' custom-style='color:black' color="#eeeeee" round icon='/images/add4.svg' open-type="share">添加成员</van-button>
+</view>
+<view style='height:150rpx'></view>
+
+
+<view class='button' bindtap="bindbutton">{{show.owner==show.openid?"解散":"离开"}}团队</view>

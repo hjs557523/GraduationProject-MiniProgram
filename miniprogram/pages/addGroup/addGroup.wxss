@@ -1,0 +1,28 @@
+/* miniprogram/pages/addGroup/addGroup.wxss */
+
+@import "/icon.wxss";
+@import "/colorui.wxss";
+
+page{
+  background: white;
+  min-height: 100vh;
+  position: absolute;
+  top: 0;
+}
+
+
+.bottombutton {
+  margin: 40rpx 130rpx;
+  height: 340rpx;
+  position: absolute;
+  bottom: 0;
+  width: 500rpx;
+}
+
+.bottombutton2 {
+  margin: 40rpx 130rpx;
+  height: 190rpx;
+  position: absolute;
+  bottom: 0;
+  width: 500rpx;
+}

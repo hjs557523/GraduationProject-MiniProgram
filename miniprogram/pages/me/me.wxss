@@ -1,0 +1,34 @@
+/* miniprogram/pages/me/me.wxss */
+@import "/colorui.wxss";
+
+page{
+  background: white;
+  min-height: 100vh;
+  position: absolute;
+  top: 0;
+}
+
+.chat {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  height: 100%;
+  opacity: 0;
+}
+
+
+.bottombutton {
+  margin: 40rpx 130rpx;
+  height: 330rpx;
+  position: absolute;
+  bottom: 0;
+  width: 500rpx;
+}
+
+.bottombutton2 {
+  margin: 30rpx 130rpx;
+  height: 200rpx;
+  position: absolute;
+  bottom: 0;
+  width: 500rpx;
+}

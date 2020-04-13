@@ -1,0 +1,63 @@
+<!-- background -->
+<view class='bg-cover' style='background-image: url("{{bgCoverUrl}}")'></view>
+<!-- Login Form -->
+<view class='login-container'>
+  <image src="{{iconUrl}}"></image>
+  <form bindsubmit='login'>
+
+    <scroll-view scroll-x class="bg-white nav">
+      <view class='flex text-center'>
+        <view class="cu-item flex-sub {{index==TabCur?'text-orange cur':''}}" wx:for="{{2}}" wx:key bindtap='tabSelect' data-id="{{index}}">{{ Tab[index] }}</view>
+      </view>
+    </scroll-view>
+    <view wx:if="{{TabCur == 0}}">
+      <view class="cu-form-group">
+        <text class='icon-people text-black'></text>
+        <input placeholder="学号/工号" class='radius input' name='username' bindblur='getUserName' value="{{ username }}"></input>
+      </view>
+
+      <view class="cu-form-group">
+        <text class='icon-lock text-black'></text>
+        <input placeholder="教务系统密码" class='radius input' name='password' type='password' bindblur='getPassword' value="{{ password }}" ></input>
+      </view>
+
+      <view class="cu-form-group">
+        <text class='icon-peoplelist text-black'></text>
+        <picker bindchange="UserTypeChange" value="{{index}}" range="{{userTypeList}}">
+          <view class="picker">{{userTypeList[userTypeListIndex]}}</view>
+        </picker>
+      </view>
+
+    </view>
+
+    <view wx:else>
+      <view class="cu-form-group">
+        <text class='icon-github text-black'></text>
+        <input placeholder="github账号" class='radius input' name='githubUserName' bindblur='getGitHubUserName' value="{{githubUsername}}"></input>
+      </view>
+
+      <view class="cu-form-group">
+        <text class='icon-attentionforbidfill text-black'></text>
+        <input placeholder="github密码" class='radius input' name='githubPassword' type='password' bindblur='getGitHubPassword' value="{{githubPassword}}"></input>
+      </view>
+
+      <view class="cu-form-group">
+        <text class='icon-friendfill text-black'></text>
+        <picker bindchange="UserTypeChange2" value="{{index}}" range="{{userTypeList2}}">
+          <view class="picker">{{userTypeList2[userTypeListIndex2]}}</view>
+        </picker>
+      </view>
+
+  </view>
+
+
+
+
+
+    <button wx:if="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo" class="login-btn" role="button" aria-label="" aria-disabled="false">登 录</button>
+  </form>
+</view>
+<!-- Prompt Message -->
+<view class='prompt-message'>
+  <text>创新实践课程管理小程序版</text>
+</view>

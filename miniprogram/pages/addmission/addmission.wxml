@@ -1,0 +1,87 @@
+<view class="cu-custom" style="height:{{CustomBar}}px;">
+  <view class="cu-bar fixed bg-gradual-pink" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+    <navigator class='action' open-type="navigateBack" delta="1" hover-class="none">
+      <text class='icon-back'></text> 返回
+    </navigator>
+    <view class='content' style='top:{{StatusBar}}px;'>创新综合实践</view>
+  </view>
+</view>
+
+<view class='padding text-center'>
+  <view class='padding-lr bg-white'>
+    <view class='solid-bottom text-xl text-black padding'>
+      <text class='padding text-bold'>创建任务</text>
+    </view>
+  </view>
+</view>
+
+
+<view class="cu-list menu sm-border card-menu ">
+  <form>
+    <view class="cu-form-group">
+      <view class='title'>任务标题：</view>
+      <input placeholder="请输入任务标题" class='radius' name='input' ></input>
+    </view>
+    <view class="cu-form-group">
+      <view class='title'>任务详情：</view>
+      <input placeholder="请填写任务详情" class='radius' name='input'></input>
+    </view>
+    <view class="cu-form-group">
+      <view class='title'>任务类型：</view>
+      <picker bindchange="PickerChange" value="{{index}}" range="{{picker}}">
+        <view class="picker">
+          {{index?picker[index]:'点击下拉选择任务类型'}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="cu-form-group">
+      <view class="peoplecard">
+        <view class='title' style='font-weight:bold'>指定执行人员：
+          <text style='font-weight:normal;font-size:0.8rem;color:#80848f'>*不勾选即为全部参与</text>
+        </view>
+        <checkbox-group bindchange="checkboxChange">
+          <view class="peoplelist">
+
+            <label class="peopleitem checkbox" wx:for="{{items}}" wx:key='index'>
+              <checkbox class="olive" value="{{item.name}}" checked="{{item.checked}}"></checkbox> {{item.value}}</label>
+
+          </view>
+        </checkbox-group>
+      </view>
+    </view>
+
+
+    <view class="cu-form-group">
+      <view class='title'>开始时间：</view>
+      <picker mode="date" value="{{startDate}}" start="2020-01-01" end="2021-09-01" bindchange="DateChange1">
+        <view class="picker">
+          {{startDate}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="cu-form-group">
+      <view class='title'>截止时间：</view>
+      <picker mode="date" value="{{endDate}}" start="2015-09-01" end="2021-09-01" bindchange="DateChange2">
+        <view class="picker">
+          {{endDate}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="cu-form-group">
+      <view class='title'>模块地址：</view>
+      <input placeholder="若为开发/测试任务, 请填写模块地址" class='radius' name='input'></input>
+    </view>
+
+
+    <view class="cu-form-group">
+      <view class='title'>标记颜色：</view>
+      <view class='color' wx:for='{{["#2d8cf0","#19be6b","#ff9900","#ed3f14"]}}' bindtap="bindcolor" data-index="{{index+1}}" wx:key='index' style='background-color:{{item}};{{colorchoose==(index+1)?"opacity: 1;":""}}'></view>
+    </view>
+  </form>
+</view>
+<view class='bottombutton'>
+  <van-button color="black" plain block icon='/images/icons8-github3.svg' bind:click='teammode'>提交任务</van-button>
+</view>

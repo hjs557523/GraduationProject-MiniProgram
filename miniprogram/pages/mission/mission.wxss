@@ -1,0 +1,145 @@
+/* pages/mission/mission.wxss */
+/* @import "/icon.wxss"; */
+@import "/colorui.wxss";
+
+page{
+  background: white;
+  min-height: 100vh;
+  position: absolute;
+  top: 0;
+}
+
+.teamtitle {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  color: orangered
+  
+}
+
+.teamcard {
+  width: 72%;
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+  padding: 20rpx;
+  margin: 20rpx 0;
+  background-color: #eaf0f1;
+  border-radius: 20rpx;
+  position: relative;
+}
+
+.more {
+  position: absolute !important;
+  right: 30rpx;
+}
+
+.teamname {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.teamlabel {
+  font-size: 0.8rem;
+  margin-right: 20rpx;
+}
+
+.subtitle {
+  margin: 30rpx 50rpx 0;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #cfdaf1;
+}
+
+.card {
+  margin: 20rpx 20rpx;
+  border-radius: 15rpx;
+  box-shadow: 0 0 20rpx #dddee1;
+  padding: 30rpx;
+}
+
+.delete {
+  /* opacity: 0.3; */
+  box-shadow: 0 0 20rpx #e9eaec;
+  color: #dddee1;
+}
+
+.titlebox {
+  display: flex;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.time {
+  margin: 10rpx 0;
+  font-size: 0.8rem;
+  color: #bbbec4;
+}
+
+.detail {
+  font-size: 0.8rem;
+  color: #80848f;
+  text-overflow: ellipsis;
+  text-align: justify;
+  /* white-space: nowrap; */
+  overflow: hidden;
+  /* margin: 20rpx 0; */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.van-swipe-cell-right {
+  width: 80px;
+  height: 100%;
+  display: inline-flex;
+  justify-content: center;
+  font-weight: bold;
+  align-items: center;
+}
+
+.van-swipe-cell-right.celldelete {
+  color: red;
+  background-color: #dd524622;
+}
+
+.van-swipe-cell-right.cellfinish {
+  color: green;
+  background-color: #16a05d22;
+}
+
+.van-swipe-cell-right.cellunfinish {
+  color: #ffcd42;
+  background-color: #ffcd4222;
+}
+
+.buttonarea {
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  width: 720rpx;
+  height: 150rpx;
+  justify-content: flex-end;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.color {
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 100%;
+  margin-right: 15rpx;
+}
+
+.ctag {
+  margin-right: 10rpx;
+  margin-bottom: 12rpx;
+}

@@ -1,0 +1,67 @@
+/* miniprogram/pages/addmission/addmission.wxss */
+@import "/icon.wxss";
+@import "/colorui.wxss";
+
+page{
+  background: white;
+  min-height: 100vh;
+  position: absolute;
+  top: 0;
+}
+
+
+.line {
+  margin: 40rpx 0;
+  border-radius: 10rpx;
+  /* height: 90rpx; */
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  /* border-color: #f7f7f7;
+  background-color: #f7f7f7; */
+  padding: 0 20rpx;
+}
+
+form-group .title {
+  min-width: calc(4em + 15px);
+}
+
+.color {
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 100%;
+  opacity: 0.2;
+  margin: 0 15rpx;
+}
+
+
+.peoplecard {
+  /* background-color: #f7f7f7; */
+  margin: 40rpx 0;
+  border-radius: 20rpx;
+  padding: 20rpx;
+  border: 1px solid #eee;
+}
+
+
+.peoplelist {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin-top: 20rpx;
+}
+
+.peopleitem {
+  /* padding: 5rpx 10rpx; *//* border-radius: 10rpx; *//* border: 1px solid #969799; *//* font-size: 0.8rem; */
+  margin: 10rpx;
+  margin-right: 1rem;
+}
+
+
+
+.bottombutton {
+  margin: 80rpx 110rpx;
+  bottom: 0;
+  width: 550rpx;
+}

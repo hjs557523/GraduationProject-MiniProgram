@@ -1,0 +1,66 @@
+<view class="cu-custom" style="height:{{CustomBar}}px;">
+  <view class="cu-bar fixed bg-gradual-blue" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+    <navigator class='action' open-type="navigateBack" delta="1" hover-class="none">
+      <text class='icon-back'></text> 返回
+    </navigator>
+    <view class='content' style='top:{{StatusBar}}px;'>创新综合实践</view>
+  </view>
+</view>
+<view class='padding text-center'>
+  <view class='padding-lr bg-white'>
+    <view class='solid-bottom text-xl text-black padding'>
+      <text class='padding text-bold'>创建团队</text>
+    </view>
+  </view>
+</view>
+
+<view class="cu-list menu sm-border card-menu ">
+  <form>
+    <view class="cu-form-group">
+      <view class='title'>团队名称：</view>
+      <input placeholder="" class='radius' name='input'></input>
+    </view>
+    <view class="cu-form-group">
+      <view class='title'>仓库地址：</view>
+      <input placeholder="" class='radius' name='input'></input>
+    </view>
+    <view class="cu-form-group">
+      <view class='title'>Token：</view>
+      <input placeholder="" class='radius' name='input'></input>
+    </view>
+
+    <view class="cu-form-group">
+      <view class='title'>所属课题：</view>
+      <picker bindchange="PickerChange" value="{{index}}" range="{{picker}}">
+        <view class="picker">
+          {{index?picker[index]:'点击下拉选择导师课题'}}
+        </view>
+      </picker>
+    </view>
+    <view class="cu-form-group">
+      <view class='title'>开题时间：</view>
+      <picker mode="date" value="{{startDate}}" start="2020-01-01" end="2021-09-01" bindchange="DateChange1">
+        <view class="picker">
+          {{startDate}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="cu-form-group">
+      <view class='title'>结题时间：</view>
+      <picker mode="date" value="{{endDate}}" start="2015-09-01" end="2021-09-01" bindchange="DateChange2">
+        <view class="picker">
+          {{endDate}}
+        </view>
+      </picker>
+    </view>
+  </form>
+</view>
+
+
+<view class='bottombutton'>
+  <van-button color="black" plain block icon='/images/icons8-gitlab2.svg' bind:click='teammode'>点击创建</van-button>
+</view>
+<view class='bottombutton2'>
+  <van-button color="grey" plain block icon='/images/icons8-git.svg' bind:click='bindjoin'>加入团队 </van-button>
+</view>

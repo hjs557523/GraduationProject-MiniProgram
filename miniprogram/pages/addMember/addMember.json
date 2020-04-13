@@ -1,0 +1,10 @@
+{
+  "usingComponents": {
+    "van-dropdown-menu": "/miniprogram_npm/@vant/weapp/dropdown-menu/index",
+    "van-dropdown-item": "/miniprogram_npm/@vant/weapp/dropdown-item/index",
+    "van-popup": "/miniprogram_npm/@vant/weapp/popup/index",
+    "van-icon": "/miniprogram_npm/@vant/weapp/icon/index",
+    "van-field": "/miniprogram_npm/@vant/weapp/field/index"
+  },
+  "enablePullDownRefresh": true
+}

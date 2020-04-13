@@ -1,0 +1,39 @@
+<!--miniprogram/pages/me/me.wxml-->
+<view class="cu-custom" style="height:{{CustomBar}}px;">
+  <view class="cu-bar fixed bg-gradual-yellow" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+    <navigator class='action' open-type="navigateBack" delta="1" hover-class="none">
+      <text class='icon-back'></text> 返回
+    </navigator>
+    <view class='content' style='top:{{StatusBar}}px;'>创新综合实践</view>
+  </view>
+</view>
+
+<view class='padding text-center'>
+  <view class='padding-lr bg-white'>
+    <view class='solid-bottom text-xl text-black padding'>
+      <text class='padding text-bold'>绑定账号</text>
+    </view>
+  </view>
+  <text class='padding'>（注：可随意填，用来在本系统生成账户，绝对安全）</text>
+</view>
+
+
+<view class='page'>
+  <van-field value="{{ username }}" label="学号/工号" clickable clearable left-icon="manager" input-align="right" placeholder="输入学号或工号" error-message = "{{isFlag==true?'学号/工号格式错误':''}}" bindblur='checkUsername'/>
+  <van-field value="{{ password }}" label="密码" clickable clearable  left-icon="lock" input-align="right" placeholder="输入教务系统密码" bindblur='checkPassword'  type="password" error-message = "{{ isFlag2==true?'密码仅支持字母和数字组合':'' }}"/>
+    <van-field value="{{ confirmPassword }}" label="确认密码" clickable clearable left-icon="lock" input-align="right" placeholder="再次确认密码" bindblur='checkconfirmPassword'  type="password" error-message = "{{ isFlag3==true?'两次密码不一致！':'' }}"/>
+  <view style='height:80rpx'></view>
+  <!-- <van-field label="关于" is-link readonly left-icon="star" /> -->
+
+  <view style='position:relative'>
+    <van-field label="联系开发者？" is-link readonly left-icon="chat" custom-style="color:grey"/>
+    <button class='chat' open-type='contact'>chat</button>
+  </view>
+</view>
+
+<view class='bottombutton'>
+  <van-button color="#3CB371"  block bind:click='bindAccount'>绑定账号</van-button>
+</view>
+<view class='bottombutton2'>
+  <van-button color="#00BFFF" block bind:click='returnLogin'>返回登录 </van-button>
+</view>
