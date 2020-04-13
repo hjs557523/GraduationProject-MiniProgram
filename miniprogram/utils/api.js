@@ -30,7 +30,7 @@ function request(method, url, data = {}, loading = true) {
             url: '../pages/login/login',
           })
           reject()
-        } else { //登录有效: 0:数据返回成功; 101:数据返回失败 1111:未绑定账号
+        } else { //登录状态有效: 0:数据返回成功; 101:数据返回失败 1111:未绑定账号
           resolve(res.data)
         }
       },

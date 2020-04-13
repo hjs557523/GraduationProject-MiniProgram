@@ -40,6 +40,8 @@ App({
   // 全局
   globalData: {
     teamid: 1,
+    userId: '',
+    userType: null,
     userInfo: null,
     openId: '',
     blog: '',
@@ -47,7 +49,7 @@ App({
     header: {
       'content-type': "application/x-www-form-urlencoded;charset=utf-8", //默认该请求方式为表单提交格式，纯json字符串格式则修改为: 'application/json; charset=UTF-8' 
       'x-requested-with': 'XMLHttpRequest', //默认该请求为ajax请求，没有该属性或修改该属性值为null，则表示为同步请求(普通请求)
-      'Cookie': null
+      'Cookie': wx.getStorageSync('Cookies')
     },
     //然后在每一次wx.request中的请求参数带上该header
     //var header = getApp().globalData.header; //获取app.js中的请求头

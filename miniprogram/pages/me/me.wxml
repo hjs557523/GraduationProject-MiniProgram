@@ -14,7 +14,7 @@
       <text class='padding text-bold'>绑定账号</text>
     </view>
   </view>
-  <text class='padding'>（注：可随意填，用来在本系统生成账户，绝对安全）</text>
+  <text class='padding'>（注：只用来在本系统生成账户信息，确保安全）</text>
 </view>
 
 
@@ -26,7 +26,7 @@
   <!-- <van-field label="关于" is-link readonly left-icon="star" /> -->
 
   <view style='position:relative'>
-    <van-field label="联系开发者？" is-link readonly left-icon="chat" custom-style="color:grey"/>
+    <van-field label="联系开发者" is-link readonly left-icon="chat" custom-style="color:grey"/>
     <button class='chat' open-type='contact'>chat</button>
   </view>
 </view>

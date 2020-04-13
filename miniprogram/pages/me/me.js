@@ -1,6 +1,8 @@
 // miniprogram/pages/me/me.js
 const app = getApp();
 const util = require('../../utils/util.js');
+const api = require("../../utils/api");
+
 Page({
 
   /**
@@ -89,7 +91,37 @@ Page({
         isFlag3:true
       })
     } else {
-      //注册
+      var that = this;
+      console.log("学号/工号：" + this.data.username);
+      console.log("密码：" + this.data.password);
+      console.log("确认密码：" + this.data.confirmPassword);
+      wx.showLoading({
+        title: '绑定中...',
+      })
+      api.request('POST', '/wx/githubBinding', {
+        username: that.data.username,
+        password: that.data.password,
+      }, false).then(res => {
+        wx.hideLoading();
+        if (res.code == 0) {
+          app.globalData.userId = res.data
+          wx.setStorageSync('userId', res.data);
+          console.log("绑定成功!");
+          wx.showToast({
+            title: '绑定成功',
+            icon: 'none',
+            duration: 3000
+          })
+
+          // 跳转到主界面
+        } else {
+          wx.showToast({
+            title: '绑定失败',
+            icon: 'none',
+            duration: 3000
+          })
+        }
+      })
       
     }
   },

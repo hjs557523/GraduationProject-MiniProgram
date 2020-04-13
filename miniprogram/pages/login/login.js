@@ -13,6 +13,7 @@ const iconUrl =
 Page({
   // 页面的初始数据
   data: {
+    coo: app.globalData.header.Cookie,
     openId: '',
     username: '',
     password: '',
@@ -86,16 +87,20 @@ Page({
               password: password,
               userType: userType
             }, false).then(res => {
+              wx.hideLoading()
               if (res.code == 0) {
                 app.globalData.header.Cookie = res.data;
                 wx.setStorageSync('Cookies', res.data);
                 console.log("登陆成功!");
-                wx.hideLoading()
+                wx.showToast({
+                  title: '登陆成功',
+                  icon: 'none',
+                  duration: 1500
+                })
                 // 跳转页面
                 //
                 //
               } else {
-                wx.hideLoading()
                 wx.showToast({
                   title: res.msg,
                   icon: 'none',
@@ -111,18 +116,29 @@ Page({
           base64Token : base64.base64_encode(username + ":" + password),
           userType : userType
         }, false).then(res => {
+          wx.hideLoading()
           if (res.code == 0) { //github验证成功，并且和本系统账号有绑定
-            app.globalData.header.Cookie = res.data;
-            wx.setStorageSync('Cookies', res.data);
+            app.globalData.header.Cookie = res.data.cookie;
+            app.globalData.userId = res.data.userId;
+            app.globalData.userType = userType;
+            wx.setStorageSync('Cookies', res.data.cookie);
+            wx.setStorageSync('userId', res.data.userId);
+            wx.setStorageSync('userType', userType);
+            console.log(res.data);
             console.log("登陆成功!");
-            wx.hideLoading()
+            wx.showToast({
+              title: '登陆成功!',
+              icon: 'none',
+              duration: 1500
+            })
           } else if(res.code == 1111) { //github验证成功，但未和本系统账号进行绑定
             app.globalData.header.Cookie = res.data;
+            app.globalData.userType = userType;
             wx.setStorageSync('Cookies', res.data);
+            wx.setStorageSync('userType', userType);
             wx.redirectTo({
               url: '/pages/me/me',
             })
-            wx.hideLoading()
             wx.showToast({
               title: res.msg,
               icon: 'none',
@@ -134,7 +150,6 @@ Page({
               icon: 'none',
               duration: 3000
             })
-            wx.hideLoading()
           }
         })
       }
