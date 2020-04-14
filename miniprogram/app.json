@@ -11,7 +11,10 @@
     "pages/addGroup/addGroup",
     "pages/addMember/addMember",
     "pages/mission/mission",
-    "pages/me/me"
+    "pages/me/me",
+    "pages/group2/group2",
+    "pages/help/help",
+    "pages/share/share"
   ],
   "window": {
     "backgroundTextStyle": "dark",

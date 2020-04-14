@@ -1,0 +1,6 @@
+<!--miniprogram/pages/group2/group2.wxml-->
+<view class="cu-custom" style="height:{{CustomBar}}px;">
+  <view class="cu-bar fixed bg-gradual-blue" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+    <view class='content' style='top:{{StatusBar}}px;'>创新实践课程管理</view>
+  </view>
+</view>

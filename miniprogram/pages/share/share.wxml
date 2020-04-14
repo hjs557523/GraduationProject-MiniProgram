@@ -1,0 +1,31 @@
+<!--miniprogram/pages/share/share.wxml-->
+<view class="cu-custom" style="height:{{CustomBar}}px;">
+  <view class="cu-bar fixed bg-gradual-blue" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+    <view class='content' style='top:{{StatusBar}}px;'>创新实践课程管理</view>
+  </view>
+</view>
+
+<view class="login-body" id="{{theme}}">
+  <view class="login">
+  <view class='public-list' wx:if="{{isEscape}}">
+    <view class='public-header mp-info'>
+      <image src="{{userInfo.avatarUrl}}" class='icon'></image>
+      <text class='mp-name'>{{userInfo.nickName}}</text>
+    </view>
+    <view class='login-tips'>
+      <view class='header'>
+      你的好友邀你加入创新实践小组【{{groupInfo.name}}】
+      </view>
+      <view class='tips-item'>
+        · <text> 迅速创建课题，实现师生互选\n</text>
+        · <text> 随时接入团队，创建任务开发\n</text>
+        · <text> 接入GitHub API，追踪项目开发进度\n</text>
+        · <text> 实现工程化的创新实践项目管理机制\n</text>
+        · <text> 更多功能请移步使用本项目的 web 端\n</text>
+      </view>
+    </view>
+    <button class='btn btn-primary login-btn' bindtap='{{loading ? "" : "joinGroup"}}'>{{loading ? '正在加入...' : '立即加入'}}</button>
+  </view>
+</view>
+</view>
+<van-notify id="join-tips" />

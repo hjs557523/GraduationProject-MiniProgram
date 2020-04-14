@@ -289,6 +289,7 @@ Page({
   // 登录按键: 授权 + 登录
   getUserInfo: function(e) {
     app.globalData.userInfo = e.detail.userInfo
+    wx.setStorageSync('userInfo', e.detail.userInfo)
     if (!!!app.globalData.userInfo) {
       wx.showToast({
         title: '拒绝授权，无法登录',

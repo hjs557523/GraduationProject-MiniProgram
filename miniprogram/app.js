@@ -45,6 +45,7 @@ App({
     userInfo: null,
     openId: '',
     blog: '',
+    isEscape: true,
     //自己维护一个header, 解决session过期问题
     header: {
       'content-type': "application/x-www-form-urlencoded;charset=utf-8", //默认该请求方式为表单提交格式，纯json字符串格式则修改为: 'application/json; charset=UTF-8' 

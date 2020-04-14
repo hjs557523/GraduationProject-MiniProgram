@@ -12,6 +12,119 @@
   box-sizing: border-box;
 } 
 
+.public-list {
+  width:90%;
+  margin:0 auto 20rpx;
+  border-radius:20rpx;
+}
+.public-header {
+  padding:30rpx 20rpx;
+  font-size:39rpx;
+  display: flex;
+  align-items: center;
+}
+.public-icon {
+  margin-right: 18rpx;
+  width:32rpx;
+  height:32rpx;
+}
+.public-item {
+  padding:20rpx 20rpx;
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  height:60rpx;
+}
+.public-item-bottom {
+  border-bottom: none !important;
+}
+.public-item-right {
+  display:flex;
+  align-items:center;
+}
+.public-item-name {
+  font-size: 34rpx;
+  color: #313131;
+  max-width: 400rpx;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.load-info {
+  font-size: 24rpx;
+  color: #313131;
+  padding: 20rpx 20rpx;
+}
+/* 配置按钮样式 */
+.btn {
+  border: .5rpx solid #eee;
+  outline: none;
+  background: none;
+  color:#444;
+  font-size: 30rpx;
+  margin-bottom: 20rpx;
+  line-height:3;
+}
+.btn-default {
+  color: #212529;
+  background-color: #e2e6ea;
+  border-color: #dae0e5;
+}
+.btn-primary {
+  color: #fff;
+  background-color: #28a745;
+  border-color: #28a745;
+}
+.btn-danger {
+  color: #fff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+.btn::after{ border: none; }
+
+.handle-basic {
+  display:flex;
+  height:100rpx;
+  align-items:center;
+  justify-content:space-around;
+  padding:10px 0;
+}
+.handle-icon {
+  width: 50rpx;
+  height: 50rpx;
+  margin: 0 20rpx;
+}
+.handle-one {
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+.handle-one::after {
+  border: none;
+}
+.handle-one-btn {
+  margin:0;
+  background:none;
+  color:#000;
+  padding:0;
+  line-height:1.4;
+}
+.handle-one text {
+  text-align:center;
+  font-size:26rpx;
+  margin-top:4rpx;
+}
+.new-tip {
+  width:70%;
+  margin:0 auto;
+  padding:39rpx;
+  margin-top:45rpx;
+  border-radius:20rpx;
+  font-size:30rpx;
+  color:#333;
+}
+
 
 /* .nav-list {
   display: flex;

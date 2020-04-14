@@ -1,0 +1,51 @@
+/* miniprogram/pages/share/share.wxss */
+@import "/colorui.wxss";
+
+#yellow-skin {
+  background-color: rgb(255, 232, 59);
+}
+
+#yellow-skin .login {
+  background-color: rgb(255, 248, 198);
+}
+
+.login {
+  padding: 4rpx;
+  width: 90%;
+  margin: 20% auto;
+  border-radius: 20rpx;
+}
+.login-body {
+  width: 100%;
+  height: 100vh;
+  padding: 40rpx 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.mp-info {
+  display:flex;
+  flex-direction:column;
+  text-align:center;
+  justify-content: center;
+  align-items: center;
+}
+.mp-info .icon {
+  height: 100rpx;
+  width: 100rpx;
+  border-radius: 50%;
+  margin: 20rpx;
+}
+.mp-info .mp-name {
+  font-size: 36rpx;
+}
+.login-tips .header {
+  font-size:30rpx;
+  margin:50rpx 0 20rpx;
+}
+.tips-item {
+  font-size:27rpx;
+  color:grey;
+}
+.login-btn {
+  margin: 70rpx 0;
+}
