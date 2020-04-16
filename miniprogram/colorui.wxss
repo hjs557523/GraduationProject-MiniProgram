@@ -3280,6 +3280,8 @@ scroll-view.cu-steps .cu-item {
   color: #fff;
 }
 
+
+
 .bg-grey {
   background-color: #8799a3;
   color: #fff;
@@ -3293,6 +3295,10 @@ scroll-view.cu-steps .cu-item {
 .bg-black {
   background-color: #333;
   color: #fff;
+}
+
+.bg-group2 {
+  color: #666
 }
 
 .bg-white {

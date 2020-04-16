@@ -1,7 +1,7 @@
 const BASE_URL = 'http://localhost:8080';
 const app = getApp();
 
-function request(method, url, data = {}, loading = true) {
+function request(method, url, header, data = {},  loading = true) {
   return new Promise(function(resolve, reject) {
     if (loading) {
       wx.showLoading({
@@ -14,12 +14,12 @@ function request(method, url, data = {}, loading = true) {
       url: BASE_URL + url,
       data: data,
       method: method,
-      header: app.globalData.header,
+      header: header,
       success: function(res) { //连接成功
         if (loading) {
           wx.hideLoading()
         }
-        console.log(res.data)
+        //console.log(res.data)
         if (res.data.code == 1001) { //当前用户已退出登录 或 用户session过期
           wx.showToast({
             title: '登录失效',
@@ -27,7 +27,7 @@ function request(method, url, data = {}, loading = true) {
             duration: 2000
           })
           wx.redirectTo({
-            url: '../pages/login/login',
+            url: '/pages/login/login',
           })
           reject()
         } else { //登录状态有效: 0:数据返回成功; 101:数据返回失败 1111:未绑定账号
@@ -45,6 +45,10 @@ function request(method, url, data = {}, loading = true) {
           showCancel: false,
         })
         reject()
+        wx.hideLoading();
+        wx.redirectTo({
+          url: '/pages/login/login',
+        })
       },
 
       complete: function(res) {},

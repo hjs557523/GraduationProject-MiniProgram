@@ -1,0 +1,164 @@
+<!--miniprogram/pages/groupDetail/groupDetail.wxml-->
+<nav class="nav-instance" my-class="{{theme}}-set-bg" my-icon-class="{{theme}}-set-icon-bg" showIcons="{{['back']}}"></nav>
+<view class='group-detail-body' id="{{theme}}">
+  <view class='group-detail'>
+    <view class='group-basic'>
+      <text class='name'>{{groupInfo.groupName}}</text>
+      <view class='group-basic-right'>
+        <van-tag mark type="primary">{{groupMemberList.length}}人</van-tag>
+        <view class='group-createtime'>导师：{{ groupTeacherName }}</view>
+      </view>
+    </view>
+    <view class='check-list'>
+      <view
+        class='one-avatar'
+        wx:for="{{ groupMemberList }}"
+        wx:key="{{index}}"
+        bindtap='showUserName'
+        data-user="{{item}}"
+      >
+        <van-icon
+          wx:if="{{groupInfo.ownerId === item.sid}}"
+          name="https://677a-gzhiyi-154dd4-1256703754.tcb.qcloud.la/light.png?sign=ae740745ffd1e70912a8467c53e60a76&t=1545455766"
+          class="user-checked"
+        />
+        <image src='{{item.picImg}}' class='user-avatar-list' />
+        <view class='user-name'>{{item.name || item.githubName}}</view>
+      </view>
+      <view class="one-avatar" wx:for="{{exactArray}}" wx:key="{{item}}"></view>
+    </view>
+    <!-- 操作按钮区 -->
+    <view class='handle-basic'>
+      <view class="handle-one" bindtap='newTask'>
+        <image class='handle-icon' src="../../images/plus.png"></image>
+        <text>任务</text>
+      </view>
+      <button class="handle-one handle-one-btn" open-type='share' wx:if="{{isEscape}}">
+        <image class='handle-icon' src="../../images/share.png"></image>
+        <text>邀请</text>
+      </button>
+      <view class="handle-one" bindtap='editGroup'>
+        <image class='handle-icon' src="../../images/gear.png"></image>
+        <text>编辑</text>
+      </view>
+
+      <view
+        class="handle-one"
+        bindtap='deleteGroup'
+        wx:if="{{groupInfo.ownerId === userId}}"
+      >
+        <image class='handle-icon' src="../../images/cancel.png"></image>
+        <text>删除</text>
+      </view>
+
+      <view
+        class="handle-one"
+        bindtap='{{loadingLeave ? "" : "leaveGroup"}}'
+        wx:if="{{groupInfo.ownerId !== userId}}"
+      >
+        <image class='handle-icon' src="../../images/cancel.png"></image>
+        <text>退出</text>
+      </view>
+    </view>
+  </view>
+  <view class='public-list'>
+    <view class='public-header'>
+      <image class='public-icon' src="../../images/list.png"></image>
+      任务/模块列表
+    </view>
+    <view
+      wx:if="{{taskList.length > 0}}"
+      class='public-item {{index === 0 ? "top" : ""}} {{index === taskList.length - 1 ? "public-item-bottom" : ""}}'
+      wx:for="{{taskList}}"
+      wx:key="index"
+      bindtap='goToTaskDetail'
+      data-bill="{{item}}"
+    >
+      <view class='public-item-name'>{{item.taskName}}<van-tag wx:if="{{true}}" plain type="default" style="margin-left: 20rpx;">{{item.student.name || item.student.githubName}}</van-tag></view>
+      <view class='public-item-right'>
+        <text class='paid-total'>状态：{{item.finished === 0? '已完成':'进行中'}}</text>
+        <van-icon name="arrow" style='color: #C6C6C6;'/>
+      </view>
+    </view>
+    <view wx:if="{{taskList.length === 0}}" class='public-item' style='font-size:27rpx;border-bottom: none;'>
+      快去新建任务吧~
+    </view>
+  </view>
+
+  <!-- 组内新增任务 -->
+  <van-dialog
+    use-slot
+    async-close
+    show="{{ newTaskModal }}"
+    show-cancel-button
+    bind:close="callNewTask"
+    title="{{isEscape ? '小组' : '任务组'}}内新建任务/模块"
+    id="new-bill-modal"
+  >
+    <view class='bill-dialog-body' style='margin:50rpx 0;'>
+      <van-field
+        value="{{ taskName }}"
+        label="任务名"
+        placeholder="请输入任务/模块名"
+        bind:change="onTaskNameChange"
+      />
+      <view class="new-tip">
+        一个较大的任务名或模块名，比如购物车模块，后续可进行任务/模块分解，分配成员执行。
+      </view>
+    </view>
+  </van-dialog>
+</view>
+
+<van-dialog id="confirm-delete-group" />
+<van-dialog id="confirm-drop-group" />
+<van-dialog id="confirm-leave-group" />
+<van-notify id="new-task-notify" />
+<van-notify id="van-notify" />
+
+<!-- 头像弹出层 -->
+<van-popup show="{{ showAvatarMenu }}" close-on-click-overlay="{{ true }}" bind:close="closeDropGrouUser" data-modal="hideModal" custom-style="border-radius: 20rpx;width: 70%;">
+  <view class='menu-body'>
+    <view class='user-info'>
+      <image style='width: 100rpx;height: 100rpx;border-radius: 50%;' src='{{menuUser.avatarUrl}}'></image>
+      <view><van-tag color="#7232dd" plain>{{groupInfo.createBy.openId === menuUser.openId ? '组长' : '组员'}}</van-tag></view>
+      <view wx:if="{{userInfoFromCloud.openId === menuUser.openId}}" style='font-size:30rpx;margin-bottom:20rpx;margin-top:11rpx;'>
+        <van-field
+            placeholder="输入新备注"
+            center
+            border="{{ true }}"
+            use-button-slot
+            bind:change="onNoteChange"
+          >
+          <van-button slot="button" size="small" type="primary" bindtap='updateNote' loading="{{loadingUpdateNote}}">确定</van-button>
+        </van-field>
+      </view>
+      <view wx:if="{{userInfoFromCloud.openId !== menuUser.openId}}" style='font-size:30rpx;margin-bottom:20rpx;margin-top:11rpx;'>{{ menuUser.note || menuUser.nickName }}</view>
+    </view>
+    <button class='btn btn-danger' bindtap='dropGrouUser' wx:if="{{groupInfo.createBy.openId === userInfoFromCloud.openId && menuUser.openId !== groupInfo.createBy.openId}}">移出群组</button>
+    <button class='btn btn-default' bindtap='closeDropGrouUser'>取消</button>
+  </view>
+</van-popup>
+<!-- 编辑群组弹层 -->
+<van-dialog
+  use-slot
+  async-close
+  show="{{ editGroupModal }}"
+  show-cancel-button
+  bind:close="confirmEditGroup"
+  title="编辑"
+  id="edit-group-modal"
+>
+  <view class='group-dialog-body' style='margin:50rpx 0;'>
+    <van-field
+      value="{{ groupName }}"
+      label="{{isEscape ? '小组' : '任务'}}名"
+      maxlength="{{20}}"
+      placeholder="起个好名？"
+      bind:change="onGroupNameChange"
+      focus="{{false}}"
+    />
+    <view class="new-tip">
+      可以重新修改{{isEscape ? '创新实践小组' : '任务'}}名称，以及该小组的进行状态
+    </view>
+  </view>
+</van-dialog>

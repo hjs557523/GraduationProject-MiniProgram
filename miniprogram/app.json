@@ -14,22 +14,42 @@
     "pages/me/me",
     "pages/group2/group2",
     "pages/help/help",
-    "pages/share/share"
+    "pages/share/share",
+    "pages/groupDetail/groupDetail"
   ],
   "window": {
-    "backgroundTextStyle": "dark",
-    "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "创新综合实践",
+    "backgroundColor": "red",
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#000",
+    "navigationBarTitleText": "创新实践课程管理",
     "navigationBarTextStyle": "black",
-    "navigationStyle": "custom"
+    "navigationStyle": "custom",
+    "enablePullDownRefresh": false
   },
   "usingComponents": {
     "van-field": "/miniprogram_npm/@vant/weapp/field/index",
+    "van-tag": "/miniprogram_npm/@vant/weapp/tag/index",
     "van-button": "/miniprogram_npm/@vant/weapp/button/index",
-    "van-icon": "/miniprogram_npm/@vant/weapp/icon/index"
+    "van-dialog": "/miniprogram_npm/@vant/weapp/dialog/index",
+    "van-icon": "/miniprogram_npm/@vant/weapp/icon/index",
+    "van-notify": "/miniprogram_npm/@vant/weapp/notify/index",
+    "van-submit-bar": "/miniprogram_npm/@vant/weapp/submit-bar/index",
+    "van-action-sheet": "/miniprogram_npm/@vant/weapp/action-sheet/index",
+    "van-cell-group": "/miniprogram_npm/@vant/weapp/cell-group/index",
+    "van-cell": "/miniprogram_npm/@vant/weapp/cell/index",
+    "van-tree-select": "/miniprogram_npm/@vant/weapp/tree-select/index",
+    "van-datetime-picker": "/miniprogram_npm/@vant/weapp/datetime-picker/index",
+    "van-popup": "/miniprogram_npm/@vant/weapp/popup/index",
+    "van-rate": "/miniprogram_npm/@vant/weapp/rate/index",
+    "van-collapse": "/miniprogram_npm/@vant/weapp/collapse/index",
+    "van-collapse-item": "/miniprogram_npm/@vant/weapp/collapse-item/index",
+    "van-panel": "/miniprogram_npm/@vant/weapp/panel/index",
+    "van-picker": "/miniprogram_npm/@vant/weapp/picker/index",
+    "van-dropdown-menu": "/miniprogram_npm/@vant/weapp/dropdown-menu/index",
+    "van-dropdown-item": "/miniprogram_npm/@vant/weapp/dropdown-item/index",
+    "nav": "./pages/nav/nav"
   },
   "tabBar": {
-    "custom": true,
     "color": "#dbdbdb",
     "selectedColor": "#333",
     "list": [

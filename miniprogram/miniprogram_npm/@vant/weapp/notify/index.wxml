@@ -9,10 +9,11 @@
     class="van-notify van-notify--{{ type }}"
     style="background:{{ background }};color:{{ color }};"
   >
-    <view
+    <!-- <view
       wx:if="{{ safeAreaInsetTop }}"
       style="height: {{ statusBarHeight }}px"
-    ></view>
+    ></view> -->
+    <view style="height:{{statusBarHeight}}px;"></view>
     <text>{{ message }}</text>
   </view>
 </van-transition>

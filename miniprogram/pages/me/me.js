@@ -98,7 +98,7 @@ Page({
       wx.showLoading({
         title: '绑定中...',
       })
-      api.request('POST', '/wx/githubBinding', {
+      api.request('POST', '/wx/githubBinding', app.globalData.header, {
         username: that.data.username,
         password: that.data.password,
       }, false).then(res => {

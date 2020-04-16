@@ -12,7 +12,7 @@
 .login {
   padding: 4rpx;
   width: 90%;
-  margin: 20% auto;
+  margin: 40% auto;
   border-radius: 20rpx;
 }
 .login-body {

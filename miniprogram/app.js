@@ -1,19 +1,23 @@
 const Towxml = require('/towxml/main'); //引入towxml库
+import Notify from './miniprogram_npm/@vant/weapp/notify/notify';
 
 //app.js
 App({
   towxml: new Towxml(), //markdown解析渲染。创建towxml对象，供小程序页面使用
 
   onLaunch: function() {
+    const self = this;
+    // 查看主题设置
+    this.globalData.skin.index = wx.getStorageSync('skin') || 0
 
-    // 云开发初始化
-    // wx.cloud.init({
-    //   env: "hjs-vfa14", //云开发环境的id
-    //   traceUser: true
-    // })
-
-
-    this.getSystemInfo();
+    // 获取手机信息以配置顶栏
+    wx.getSystemInfo({
+      success: res => {
+        this.globalData.statusBarHeight = res.statusBarHeight
+        this.globalData.navBarHeight = 44 + res.statusBarHeight
+        this.globalData.screenWidth = res.screenWidth
+      }
+    }) 
 
     // 获取用户信息
     wx.getSetting({
@@ -23,26 +27,71 @@ App({
           wx.getUserInfo({
             success: res => {
               // 可以将 res 发送给后台解码出 unionId
-              this.globalData.userInfo = res.userInfo
+              self.globalData.userInfo = res.userInfo
 
               // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
               // 所以此处加入 callback 以防止这种情况
-              if (this.userInfoReadyCallback) {
-                this.userInfoReadyCallback(res)
+              if (self.userInfoReadyCallback) {
+                self.userInfoReadyCallback(res)
               }
             }
           })
         }
       }
     })
+
+    // 这里应该逻辑为登陆成功后，再在login.js里开启webSocket
+    if(self.globalData.socketStatus === 'closed') {
+      //self.openSocket();
+    }
   },
+
+
+  setTheme(page) {
+    const storeTheme = wx.getStorageSync('theme') || 'yellow-skin'
+    page.setData({
+      theme: storeTheme,
+      selectType: storeTheme
+    })
+  },
+
+
+  /**
+   * 将子页面函数设置为全局变量
+   */
+  setMe(me) {
+    this.globalData.me = me;// me就是 groupDetail.js的executeNotify
+  },
+
+
 
   // 全局
   globalData: {
-    teamid: 1,
-    userId: '',
-    userType: null,
+
+
+    notify: {},//通知方法
+
+    socketStatus: 'closed',
+    currentGroupInfo: null,
+    currentGroupUserList: [],
+    currentBill: null,
     userInfo: null,
+    shareParam: null,
+    billId: '', // 用于展示结果的billid
+    userInfoFromCloud: null,
+    userRemark: {},
+    statusBarHeight: 0,
+    navBarHeight: 0,
+    screenWidth: 0,
+    isLoading: false,
+    shareWord: function () {
+      return `你的同学${this.userInfo.nickName}在用这个创新实践课程管理小程序，你也来试试吧 `},
+    sharePath: '/pages/group2/group2',
+    imageUrl: 'https://s1.ax1x.com/2020/04/16/JF6Qqe.png',
+    isEscape: true,
+    teamid: 1,
+    userId: null,
+    userType: null,
     openId: '',
     blog: '',
     isEscape: true,
@@ -55,122 +104,118 @@ App({
     //然后在每一次wx.request中的请求参数带上该header
     //var header = getApp().globalData.header; //获取app.js中的请求头
 
-    ColorList: [{
-      title: '嫣红',
-      name: 'red',
-      color: '#e54d42'
-    },
-    {
-      title: '桔橙',
-      name: 'orange',
-      color: '#f37b1d'
-    },
-    {
-      title: '明黄',
-      name: 'yellow',
-      color: '#fbbd08'
-    },
-    {
-      title: '橄榄绿色',
-      name: 'olive',
-      color: '#8dc63f'
-    },
-    {
-      title: '森绿',
-      name: 'green',
-      color: '#39b54a'
-    },
-    {
-      title: '天青',
-      name: 'cyan',
-      color: '#1cbbb4'
-    },
-    {
-      title: '海蓝',
-      name: 'blue',
-      color: '#0081ff'
-    },
-    {
-      title: '姹紫',
-      name: 'purple',
-      color: '#6739b6'
-    },
-    {
-      title: '木槿',
-      name: 'mauve',
-      color: '#9c26b0'
-    },
-    {
-      title: '桃粉',
-      name: 'pink',
-      color: '#e03997'
-    },
-    {
-      title: '棕褐',
-      name: 'brown',
-      color: '#a5673f'
-    },
-    {
-      title: '玄灰',
-      name: 'grey',
-      color: '#8799a3'
-    },
-    {
-      title: '草灰',
-      name: 'gray',
-      color: '#aaaaaa'
-    },
-    {
-      title: '墨黑',
-      name: 'black',
-      color: '#333333'
-    },
-    {
-      title: '雅白',
-      name: 'white',
-      color: '#ffffff'
-    },
-    ]
-  },
 
-  // 获取系统信息
-  getSystemInfo() {
-    wx.getSystemInfo({
-      success: e => {
-        this.globalData.StatusBar = e.statusBarHeight;
-        let custom = wx.getMenuButtonBoundingClientRect();
-        if (custom) {
-          this.globalData.Custom = custom;
-          this.globalData.CustomBar = custom.bottom + custom.top - e.statusBarHeight;
-        } else {
-          this.globalData.CustomBar = e.statusBarHeight + 50;
+    header2: {
+      'content-type': "application/json;charset=utf-8", //默认该请求方式为表单提交格式，纯json字符串格式则修改为: 'application/json; charset=UTF-8' 
+      'x-requested-with': 'XMLHttpRequest', //默认该请求为ajax请求，没有该属性或修改该属性值为null，则表示为同步请求(普通请求)
+      'Cookie': wx.getStorageSync('Cookies')
+    },
+
+    skin: {
+      colorList: [
+        {
+          bg0: 'rgb(255, 232, 59)',
+          type: 'yellow-skin'
+        },
+        {
+          bg0: '#F2F2F2',
+          type: 'white-skin'
+        },
+        {
+          bg0: '#7BB2D9',
+          type: 'blue-skin'
+        }, {
+          bg0: '#60837F',
+          type: 'green-skin'
+        }, {
+          bg0: '#AE303F',
+          type: 'red-skin'
+        }, {
+          bg0: '#6B60C8',
+          type: 'purple-skin'
         }
-      }
-    });
+      ],
+      index: 0
+    }
   },
 
-  
 
-  // getOpenId() {
-  //   var that = this;
-  //   wx.cloud.callFunction({
-  //     name: 'getOpenId',
-  //     complete: res => {
-  //       // res: {
-  //       //   errMsg: "cloud.callFunction:ok",
-  //       //   result: {
-  //       //     userInfo: {
-  //       //       appId: "wx55cd29c85957466a",
-  //       //       openId: "oLM575X8DAwc6rxmZMOJ4rPxbMdM"
-  //       //     },
-  //       //     ...
-  //       //   },
-  //       //   requestID: "2aa0d2e1-6f28-11ea-ab05-525400192d0e"
-  //       // }
-  //       this.globalData.openId = res.result.openId;
-  //       console.log("openId1:" + this.globalData.openId)
-  //     }
-  //   })
-  // },
+  showLoading(target) {
+    const nav = target.selectComponent('.nav-instance')
+    nav.showLoading()
+  },
+
+
+  hideLoading(target) {
+    const nav = target.selectComponent('.nav-instance')
+    nav.hideLoading()
+  },
+
+  /**
+   * 打开webSocket，并开始进行事件监听
+   */
+  openSocket() {
+    var self = this;
+    //打开时的动作
+    wx.onSocketOpen(() => {
+      console.log('WebSocket 已连接')
+      this.globalData.socketStatus = 'connected';
+      
+      //this.sendMessage();
+
+    })
+
+    //断开时的动作
+    wx.onSocketClose(() => {
+      console.log('WebSocket 已断开')
+      this.globalData.socketStatus = 'closed'
+    })
+
+    //报错时的动作
+    wx.onSocketError(error => {
+      console.error('socket error:', error)
+    })
+
+    // 监听服务器推送的消息
+    wx.onSocketMessage(message => {
+      // 把JSONStr转为JSON
+      message = message.data.replace(" ", "");
+      if (typeof message != 'object') {
+        message = message.replace(/\ufeff/g, ""); //重点
+        var jj = JSON.parse(message);
+        message = jj;
+      }
+      console.log("【websocket监听到消息】内容如下：");
+
+      self.globalData.me("helloword");
+    })
+
+
+    // 打开信道
+    wx.connectSocket({
+      url: "ws://" + "localhost" + ":8080/websocket/" + wx.getStorageSync('userId'),
+    })
+  },
+
+  //关闭信道
+  closeSocket() {
+    if (this.globalData.socketStatus === 'connected') {
+      wx.closeSocket({
+        success: () => {
+          this.globalData.socketStatus = 'closed'
+        }
+      })
+    }
+  },
+
+  //发送消息函数
+  sendMessage() {
+    if (this.globalData.socketStatus === 'connected') {
+      //自定义的发给后台识别的参数 ，我这里发送的是name
+      wx.sendSocketMessage({
+        data: "{\"toUserId\":\"1\", \"contentText\":\"请求连接\"}"
+      })
+    }
+  },
 
 });

@@ -81,7 +81,7 @@ Page({
       if (loginMode == 0) {
         wx.login({
           success: function (res) {
-            api.request('POST', '/wx/login', {
+            api.request('POST', '/wx/login', app.globalData.header, {
               code: res.code,
               username: username,
               password: password,
@@ -89,17 +89,26 @@ Page({
             }, false).then(res => {
               wx.hideLoading()
               if (res.code == 0) {
-                app.globalData.header.Cookie = res.data;
-                wx.setStorageSync('Cookies', res.data);
+                app.globalData.header.Cookie = res.data.cookie;
+                app.globalData.header2.Cookie = res.data.cookie;
+                app.globalData.userId = res.data.userId;
+                console.log(app.globalData.userId);
+                app.globalData.userType = userType;
+                wx.setStorageSync('Cookies', res.data.cookie);
+                wx.setStorageSync('userId', res.data.userId);
+                wx.setStorageSync('userType', userType);
+                
                 console.log("登陆成功!");
                 wx.showToast({
                   title: '登陆成功',
                   icon: 'none',
                   duration: 1500
                 })
-                // 跳转页面
-                //
-                //
+
+                // 跳转团队详情页面
+                wx.redirectTo({
+                  url: '/pages/group2/group2',
+                })
               } else {
                 wx.showToast({
                   title: res.msg,
@@ -112,13 +121,14 @@ Page({
           }
         })
       } else {
-        api.request('POST', '/wx/githubLogin', {
+        api.request('POST', '/wx/githubLogin', app.globalData.header, {
           base64Token : base64.base64_encode(username + ":" + password),
           userType : userType
         }, false).then(res => {
           wx.hideLoading()
           if (res.code == 0) { //github验证成功，并且和本系统账号有绑定
             app.globalData.header.Cookie = res.data.cookie;
+            app.globalData.header2.Cookie = res.data.cookie;
             app.globalData.userId = res.data.userId;
             app.globalData.userType = userType;
             wx.setStorageSync('Cookies', res.data.cookie);
@@ -133,6 +143,7 @@ Page({
             })
           } else if(res.code == 1111) { //github验证成功，但未和本系统账号进行绑定
             app.globalData.header.Cookie = res.data;
+            app.globalData.header2.Cookie = res.data;
             app.globalData.userType = userType;
             wx.setStorageSync('Cookies', res.data);
             wx.setStorageSync('userType', userType);
@@ -224,8 +235,6 @@ Page({
     this.setData({
       password: e.detail.value
     })
-
-    console.log(this.data.githubPassword);
   },
 
   //获取 repository 列表
@@ -363,6 +372,7 @@ Page({
 
   // 生命周期函数--监听页面加载
   onLoad: function() {
+    console.log("login.wxml 执行了 onLoad");
     // if(app.globalData.header.Cookie != null) {
 
 
@@ -385,11 +395,17 @@ Page({
   // 生命周期函数--监听页面初次渲染完成
   onReady: function() {},
   // 生命周期函数--监听页面显示
-  onShow: function() {},
+  onShow: function() {
+    console.log("login.wxml 执行了 onShow");
+  },
   // 生命周期函数--监听页面隐藏
-  onHide: function() {},
+  onHide: function() {
+    console.log("login.wxml 执行了 onHide");
+  },
   // 生命周期函数--监听页面卸载
-  onUnload: function() {},
+  onUnload: function() {
+    console.log("login.wxml 执行了 onUnload");
+  },
   // 页面相关事件处理函数--监听用户下拉动作
   onPullDownRefresh: function() {},
   // 页面上拉触底事件的处理函数

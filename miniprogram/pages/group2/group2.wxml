@@ -1,6 +1,67 @@
 <!--miniprogram/pages/group2/group2.wxml-->
-<view class="cu-custom" style="height:{{CustomBar}}px;">
-  <view class="cu-bar fixed bg-gradual-blue" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
-    <view class='content' style='top:{{StatusBar}}px;'>创新实践课程管理</view>
+<nav class="nav-instance" my-class="{{theme}}-set-bg" my-icon-class="{{theme}}-set-icon-bg" showIcons="{{['home']}}"></nav>
+
+<view class="group-body" id="{{theme}}">
+  <view class='public-list'>
+    <view class='public-header'>
+      <image class='public-icon' src="../../images/group.png"></image>
+      我的{{isEscape ? '小组' : '任务'}}
+    </view>
+    <view
+      class='public-item {{index === 0 ? "top" : ""}} {{index === groupList.length - 1 ? "public-item-bottom" : ""}}'
+      wx:for="{{groupList}}"
+      wx:key="index"
+      bindtap='goToGroupDetail'
+      data-group="{{item}}"
+    >
+      <view class='public-item-name'>{{item.groupName}}</view>
+      <view style="display:flex;align-items:center;">
+        <image src='{{item.avatar}}' class='creater'></image>
+        <van-icon name="arrow" style='color: #C6C6C6;display: flex;'/>
+      </view>
+    </view>
   </view>
 </view>
+
+<!-- <van-dialog id="van-dialog" /> -->
+<!-- 新增群组弹层 -->
+<!-- <van-dialog
+  use-slot
+  async-close
+  show="{{ newGroupModal }}"
+  show-cancel-button
+  bind:close="callNewGroup"
+  title="创建{{isEscape ? '小组' : '任务'}}"
+  id="new-group-modal"
+>
+  <view class='group-dialog-body' style='margin:50rpx 0;'>
+    <van-field
+      value="{{ groupName }}"
+      label="{{isEscape ? '团队' : '任务'}}名称"
+      maxlength="{{20}}"
+      placeholder="自定义团队名称"
+      bind:change="onGroupNameChange"
+      focus="{{false}}"
+    />
+    <van-field
+      value="{{ repositoryUrl }}"
+      label="{{isEscape ? '仓库' : '模块'}}地址"
+      maxlength="{{20}}"
+      placeholder="输入github仓库地址"
+      bind:change="onRepositoryUrlChange"
+      focus="{{false}}"
+    />
+    
+  </view>
+</van-dialog> -->
+<!-- <van-notify id="notify-selector" /> -->
+
+<van-action-sheet round='false' show="{{ showAddGroupSheet }}" title="新建小组" bind:close='closeAddGroupSheet'> 
+  <view class='sheet-body'>
+    <van-field value="{{ groupName }}" clearable label="小组名称" placeholder="请输入小组名称" bind:change="addGroupNameInput" required data-field="title" />
+    <van-field value="{{ repositoryUrl }}" clearable label="项目地址" placeholder="请输入项目的github地址" bind:change="addRepositoryUrlInput" required data-field="title" />
+    <van-cell title="课题选择" value="" border="{{ false }}"/>
+    <van-picker columns="{{ subjectNameList }}" bind:change="onChange" value-key=""  default-index="{{ 2 }}"  visible-item-count='{{ 4 }}'/>
+    <button class='btn btn-primary' bindtap="addGroup">点击创建</button>
+  </view>
+</van-action-sheet>

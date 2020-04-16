@@ -1,13 +1,14 @@
 <!--miniprogram/pages/me/me.wxml-->
-<view class="cu-custom" style="height:{{CustomBar}}px;">
+<!-- <view class="cu-custom" style="height:{{CustomBar}}px;">
   <view class="cu-bar fixed bg-gradual-yellow" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
     <navigator class='action' open-type="navigateBack" delta="1" hover-class="none">
       <text class='icon-back'></text> 返回
     </navigator>
     <view class='content' style='top:{{StatusBar}}px;'>创新综合实践</view>
   </view>
-</view>
-
+</view> -->
+<!-- <nav class="nav-instance" my-class="{{theme}}-set-bg" my-icon-class="{{theme}}-set-icon-bg" showIcons="{{['home']}}"></nav> -->
+<nav class="nav-instance" my-class="{{theme}}-set-bg" my-icon-class="{{theme}}-set-icon-bg" showIcons="{{['back']}}"></nav>
 <view class='padding text-center'>
   <view class='padding-lr bg-white'>
     <view class='solid-bottom text-xl text-black padding'>
