@@ -1,0 +1,177 @@
+<!--miniprogram/pages/taskDetail/taskDetail.wxml-->
+<scroll-view scroll-y="{{true}}" class="group-body" id="{{theme}}">
+  <nav class="nav-instance" my-class="{{theme}}-set-bg" my-icon-class="{{theme}}-set-icon-bg" showIcons="{{['back']}}"></nav>
+  <view class='public-list' style='padding-bottom: 14rpx;margin-top:28rpx;'>
+    <view class='public-header' style='justify-content:space-between;'>
+      <view>
+        <image class='public-icon' src="../../images/list.png"></image>
+        {{ currentTask.taskName }}
+      </view>
+    </view>
+    <view class='handle-basic'>
+      <view class="handle-one" bindtap='addProcess' wx:if="{{ currentTask.finished !== 1 }}">
+        <image class='handle-icon' src="../../images/plus.png"></image>
+        <text>子任务</text>
+      </view>
+      <view class="handle-one" wx:if="{{ currentTask.finished === 1 }}" bindtap='onSubmitBill' data-isend="N">
+        <image class='handle-icon' src="../../images/do-not-roll.png"></image>
+        <text>取消完成</text>
+      </view>
+      <view class="handle-one" wx:if="{{ currentTask.finished === 1 }}" bindtap='goToResult'>
+        <image class='handle-icon' src="../../images/cardiogram.png"></image>
+        <text>分享结果</text>
+      </view>
+
+      <!-- 任务创建者和小组创建者都可以删除任务 -->
+      <view class="handle-one" bindtap='deleteBill' wx:if="{{ userId === currentTask.student.sid || currentGroupInfo.ownerId === userId }}">
+        <image class='handle-icon' src="../../images/cancel.png"></image>
+        <text>删除</text>
+      </view>
+    </view>
+    <view class="load-project" wx:if="{{processList.length === 0 &&  isLoadingProject === true}}">
+      正在加载子任务项...
+    </view>
+    <van-collapse value="{{ activeCollapse }}" bind:change="onCollapseChange" wx:if="{{processList.length > 0}}" class='public-item-collapse {{index === 0 ? "top" : ""}} {{index === processList.length - 1 ? "bottom" : ""}}' wx:for="{{processList}}" wx:key="index">
+      <van-collapse-item name="{{index}}">
+        <view slot="title" class='coll-outer'>
+          <view class="head">
+            <image src='{{item.publisherAvatar}}' class='user-avatar'></image>
+            <view class='item-and-name'>
+              <view class='public-item-name mytitle'>{{ item.processTitle }}</view>
+              <view class='name'>创建：{{ item.publisherName }}</view>
+            </view>
+          </view>
+          <view class='project-item-right'>
+            <view wx:if="{{ item.processStatus === 0 }}" class='paid-total'>
+              <text style='color: #1989fa;font-weight: bold;'>进行中</text>
+            </view>
+            <view wx:if="{{ item.processStatus === 1 }}" class='paid-total'>
+              <text style='color: #28a745;font-weight: bold;'>已完成</text>
+            </view>
+            <view wx:if="{{ item.processStatus === 2 }}" class='paid-total'>
+              <text style='color: #FF0000;font-weight: bold;'>已过期</text>
+            </view>
+            <view class='paid-total'>{{ item.endTime }}</view>
+          </view>
+        </view>
+
+        <view class='contain-avatars'>
+          <van-tag mark color="#FF1493" style="margin-right:20rpx;">任务名称</van-tag>
+          <view class="detail">
+            <text>{{ item.processTitle }}</text>
+          </view>
+        </view>
+
+        <view class='contain-avatars'>
+          <van-tag mark type="success" style="margin-right:20rpx;">分配人员</van-tag>
+          <view>
+            <view class='check-list-contain'>
+              <view class='one-avatar' wx:for="{{item.executerList}}" wx:key="{{index}}" bindtap='showUserName' data-user="{{item}}">
+                <image src='{{item.avatar}}' class='user-avatar-list' />
+                <view class='user-name'>{{item.name}}</view>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <view class='contain-avatars'>
+          <van-tag mark type="primary" style="margin-right:20rpx;">任务描述</van-tag>
+          <view class="detail">
+            <text>{{ item.processDetail }}</text>
+          </view>
+        </view>
+
+        <view class='contain-avatars'>
+          <van-tag mark type="warning" style="margin-right:20rpx;">Issue标签</van-tag>
+          <view class="detail2">
+            <text>{{ item.moduleUrl }}</text>
+          </view>
+        </view>
+
+        <!-- 组长 / 发布者可操作 任务接收者不可操作-->
+        <view class='handle-project' wx:if="{{(userId === item.publisherId || currentGroupInfo.ownerId === userId) && currentTask.finished !== 1 }}">
+          <van-icon name="https://s1.ax1x.com/2020/04/18/JnC8xO.png" style='color: #dc3545;font-size:46rpx;margin-right:21rpx;' bindtap='finishProject' data-item='{{item}}' wx:if="{{item.processStatus === 1}}" />
+          <van-icon name="https://s1.ax1x.com/2020/04/18/JmJpuQ.png" style='color: #dc3545;font-size:46rpx;margin-right:21rpx;' bindtap='finishProject' data-item='{{item}}' wx:if="{{item.processStatus !== 1}}" />
+          <van-icon name="https://677a-gzhiyi-154dd4-1256703754.tcb.qcloud.la/edit.png?sign=732bca2e765665cbdfdb84cb6ead92ed&t=1545793748" style='color: #dc3545;font-size:46rpx;margin-right:21rpx;' bindtap='editProject' data-item='{{item}}' />
+          <van-icon name="https://677a-gzhiyi-154dd4-1256703754.tcb.qcloud.la/empty-red.png?sign=09d2cfdc5b10893fa08bbe267096181d&t=1545793941" style='color: #dc3545;font-size:46rpx;' bindtap='deleteProject' data-item='{{item}}' />
+        </view>
+      </van-collapse-item>
+    </van-collapse>
+    <view class='tips' hidden='{{ !showMyPaid }}'>您目前参与了 {{ myProcess }} 个子任务</view>
+  </view>
+
+  <!-- leave a word -->
+  <view class='public-list setting-area' wx:if="{{isEscape}}">
+    <view class='public-header'>
+      <image class='public-icon' src="../../images/bubble-speak.png"></image>
+      说说
+    </view>
+    <view class='setting'>
+      <view class='word-content'>
+        <view wx:for="{{wordList}}" wx:key="{{item.id}}">
+          <view class='word-item' bindlongpress="deleteWord" data-word="{{item}}" wx:if="{{item.sid !== userId}}">
+            <image bindtap='showWordUserName' data-user="{{item}}" src='{{item.avater}}' class='user-avatar'></image>
+            <view class='word-tang-left'></view>
+            <view class='word-detail'>
+              {{item.comment}}
+              <view class="word-time">{{item.createDate}}</view>
+            </view>
+          </view>
+          <view class='word-item' bindlongpress="deleteWord" data-word="{{item}}" wx:else>
+            <view class='word-detail'>
+              {{item.comment}}
+              <view class="word-time">{{item.createDate}}</view>
+            </view>
+            <view class='word-tang-right'></view>
+            <image bindtap='showWordUserName' data-user="{{item}}" src='{{item.avater}}' class='user-avatar-right'></image>
+          </view>
+        </view>
+      </view>
+      <view class="delete-tip" wx:if="{{wordList.length > 0}}">长按你发出的留言进行操作</view>
+      <view class='divide' wx:if="{{wordList.length > 0}}"></view>
+      <van-field value="{{ word }}" type="textarea" placeholder="在这里集中讨论 ~" autosize border="{{ false }}" bind:change="onWordChange" wx:if="{{!showAddProjectSheet}}" />
+    </view>
+    <view class='send-word'>
+      <van-button square type="primary" size="small" bindtap='sendWord' loading='{{loadingSendWord}}'>
+        发送
+      </van-button>
+    </view>
+  </view>
+
+
+  <view class='space'></view>
+</scroll-view>
+<van-submit-bar wx:if="{{ currentTask != 1 }}" price="{{ processList.length * 100 }}" decimal-length="0" button-text="结束所有" bind:submit="onSubmitAll" loading="{{loadingEnd}}" custom-class="marginB" data-isend="Y" disabled="{{currentTask === 1}}" label="总任务数："
+  currency="" />
+<van-submit-bar wx:else disabled price="{{ processList.length * 100 }}" tip="此任务/模块已完成，仅供查看" button-text="结束所有" custom-class="marginB" />
+<van-toast id="van-toast" />
+<van-notify id="bill-delete-selector" />
+<van-dialog id="confirm-delete-bill" />
+<van-dialog id="confirm-delete-word" /> -->
+<van-action-sheet show="{{ showAddProjectSheet }}" title="新建一个任务项" bind:close='closeAddProjectSheet' round="false">
+  <view class='sheet-body'>
+    <van-field value="{{ projectTitle }}" clearable label="任务名" placeholder="请输入子任务名" bind:change="addProjectTitleInput" required data-field="title" />
+    <van-field value="{{ projectDetail }}" clearable label="任务描述" placeholder="简要填写下需求或描述" bind:change="addProjectDetailInput" required data-field="title" />
+    <van-dropdown-menu>
+      <van-dropdown-item value="{{ moduleUrl }}" options="{{ option1 }}" bind:change="choose" />
+    </van-dropdown-menu>
+    <!-- <van-field value="{{ moduleUrl }}" clearable label="添加标签" placeholder="填写下该模块的调用方式" bind:change="addModuleUrlInput" required data-field="title" /> -->
+    <van-cell-group>
+      <van-cell title="分配成员" value="" border="{{false}}" />
+      <view class='check-list'>
+        <view class='one-avatar' wx:for="{{ currentGroupMemberList }}" wx:key="{{index}}" bindtap='clickAvatar' data-index="{{index}}">
+          <van-icon wx:if="{{item.checked}}" name="https://677a-gzhiyi-154dd4-1256703754.tcb.qcloud.la/checkmark-circle-2.png?sign=90bae0ca23a06bede5809c4f143177c3&t=1545275048" class="user-checked" />
+          <image src='{{item.picImg}}' class='user-avatar-list-sheet' />
+        </view>
+      </view>
+    </van-cell-group>
+    <van-cell-group>
+      <van-cell title="截止时间" value="" border="{{false}}" />
+      <van-datetime-picker type="datetime" value="{{ endDate }}" min-date="{{ minDate }}" max-date="{{ maxDate }}" bind:input="onTimeChange" show-toolbar="{{ false }}" item-height="{{27}}" visible-item-count="{{ 4 }}" />
+    </van-cell-group>
+    <button class='btn btn-primary' bindtap="{{loadingConfirm ? '' : isEditProject ? 'confirmEditProject' : 'confirmAddProject'}}">
+      {{loadingConfirm ? '正在提交...' : isEditProject ? '修改' : '确认'}}
+    </button>
+  </view>
+</van-action-sheet>
+<van-dialog id="van-dialog" />

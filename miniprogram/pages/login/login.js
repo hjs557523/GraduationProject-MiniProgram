@@ -13,6 +13,7 @@ const iconUrl =
 Page({
   // 页面的初始数据
   data: {
+    backPath: '',
     coo: app.globalData.header.Cookie,
     openId: '',
     username: '',
@@ -30,31 +31,7 @@ Page({
     scrollLeft: 0,
     Tab: ['系统账号登录', 'GitHub登录']
   },
-  // 验证是否登录
-  // verifyLogin() {
-  //   let isLogin = !!wx.getStorageSync("Authorization") && !!wx.getStorageSync("username") && !!wx.getStorageSync("selectedRepository");
-  //   //只有三者都不为空，才返回true
 
-  //   if (isLogin) {
-
-  //     //Get the authenticated user all basic messages
-
-  //     wx.switchTab({
-  //       url: "/pages/index/index"
-  //     });
-
-  //     request
-  //       .get("/user")
-  //       .then(res => {
-  //         console.log(res);
-  //         app.globalData.userInfo = res;
-
-  //       })
-  //       .catch(err => {
-  //         this.handleErr(err);
-  //       });
-  //   }
-  // },
 
   tabSelect(e) {
     this.setData({
@@ -67,11 +44,7 @@ Page({
 
   // 登录函数
   login: function(username, password, userType, loginMode) {
-    // 设置当前用户以及选择的仓库
-    // wx.setStorageSync("username", username);
-    // wx.setStorageSync("password", password);
-    // wx.setStorageSync("userType", userTypeListIndex);
-
+    const { backPath } = this.data
     if (!!username || !!password) {
       wx.showLoading({
         title: '正在登录'
@@ -80,24 +53,27 @@ Page({
       console.log(this.data);
       if (loginMode == 0) {
         wx.login({
-          success: function (res) {
+          success: function(res) {
             api.request('POST', '/wx/login', app.globalData.header, {
               code: res.code,
               username: username,
               password: password,
               userType: userType
             }, false).then(res => {
-              wx.hideLoading()
               if (res.code == 0) {
                 app.globalData.header.Cookie = res.data.cookie;
                 app.globalData.header2.Cookie = res.data.cookie;
+                app.globalData.header3.Cookie = res.data.cookie;
                 app.globalData.userId = res.data.userId;
-                console.log(app.globalData.userId);
                 app.globalData.userType = userType;
+                app.globalData.username = username;
                 wx.setStorageSync('Cookies', res.data.cookie);
                 wx.setStorageSync('userId', res.data.userId);
                 wx.setStorageSync('userType', userType);
-                
+                wx.setStorageSync('username', username);
+                wx.hideLoading()
+
+
                 console.log("登陆成功!");
                 wx.showToast({
                   title: '登陆成功',
@@ -106,7 +82,7 @@ Page({
                 })
 
                 // 跳转团队详情页面
-                wx.redirectTo({
+                wx.switchTab({
                   url: '/pages/group2/group2',
                 })
               } else {
@@ -117,55 +93,73 @@ Page({
                 })
               }
             })
-            
+
           }
         })
       } else {
-        api.request('POST', '/wx/githubLogin', app.globalData.header, {
-          base64Token : base64.base64_encode(username + ":" + password),
-          userType : userType
-        }, false).then(res => {
-          wx.hideLoading()
-          if (res.code == 0) { //github验证成功，并且和本系统账号有绑定
-            app.globalData.header.Cookie = res.data.cookie;
-            app.globalData.header2.Cookie = res.data.cookie;
-            app.globalData.userId = res.data.userId;
-            app.globalData.userType = userType;
-            wx.setStorageSync('Cookies', res.data.cookie);
-            wx.setStorageSync('userId', res.data.userId);
-            wx.setStorageSync('userType', userType);
-            console.log(res.data);
-            console.log("登陆成功!");
-            wx.showToast({
-              title: '登陆成功!',
-              icon: 'none',
-              duration: 1500
+        wx.login({
+          success: function(res) {
+            console.log(base64.base64_encode(username + ":" + password))
+            console.log(res.code)
+            api.request('POST', '/wx/githubLogin', app.globalData.header, {
+              code: res.code,
+              base64Token: base64.base64_encode(username + ":" + password),
+              userType: userType
+            }, false).then(res => {
+              wx.hideLoading()
+              if (res.code == 0) { //github验证成功，并且和本系统账号有绑定
+                app.globalData.header.Cookie = res.data.cookie;
+                app.globalData.header2.Cookie = res.data.cookie;
+                app.globalData.header3.Cookie = res.data.cookie;
+                app.globalData.userId = res.data.userId;
+                app.globalData.userType = userType;
+                app.globalData.username = username;
+                wx.setStorageSync('Cookies', res.data.cookie);
+                wx.setStorageSync('userId', res.data.userId);
+                wx.setStorageSync('username', username);
+                wx.setStorageSync('userType', userType);
+                console.log(res.data);
+                console.log("登陆成功!");
+                wx.showToast({
+                  title: '登陆成功!',
+                  icon: 'none',
+                  duration: 1500
+                })
+                wx.redirectTo({
+                  url: `${backPath === '' ? '/pages/group2/group2' : `/pages/${backPath}/${backPath}`}`,
+                })
+              } else if (res.code == 1111) { //github验证成功，但未和本系统账号进行绑定
+                app.globalData.header.Cookie = res.data;
+                app.globalData.header2.Cookie = res.data;
+                app.globalData.header3.Cookie = res.data.cookie;
+                app.globalData.userType = userType;
+                app.globalData.username = username;
+
+                wx.setStorageSync('Cookies', res.data);
+                wx.setStorageSync('userType', userType);
+                wx.setStorageSync('username', username);
+                wx.redirectTo({
+                  url: `${backPath === '' ? '/pages/me/me' : `/pages/me/me?back=${backPath}`}`,
+                })
+                wx.showToast({
+                  title: res.msg,
+                  icon: 'none',
+                  duration: 2000
+                })
+              } else { //登录失败，github账号和密码错误
+                wx.showToast({
+                  title: res.msg,
+                  icon: 'none',
+                  duration: 3000
+                })
+              }
             })
-          } else if(res.code == 1111) { //github验证成功，但未和本系统账号进行绑定
-            app.globalData.header.Cookie = res.data;
-            app.globalData.header2.Cookie = res.data;
-            app.globalData.userType = userType;
-            wx.setStorageSync('Cookies', res.data);
-            wx.setStorageSync('userType', userType);
-            wx.redirectTo({
-              url: '/pages/me/me',
-            })
-            wx.showToast({
-              title: res.msg,
-              icon: 'none',
-              duration: 2000
-            })
-          } else { //登录失败，github账号和密码错误
-            wx.showToast({
-              title: res.msg,
-              icon: 'none',
-              duration: 3000
-            })
+
+
           }
         })
       }
-    } 
-    else {
+    } else {
       wx.showToast({
         title: "请输入账号和密码!",
         icon: "none",
@@ -237,52 +231,6 @@ Page({
     })
   },
 
-  //获取 repository 列表
-  // getRepository: function(e) { //bindblur失去焦点就会触发, 即填完密码后就会触发
-  //   const password = e.detail.value;
-  //   const username = this.data.username;
-  //   if (!!username && !!password) {
-  //     wx.request({
-  //       url: `https://api.github.com/users/${username}/repos`, //ES6语法
-  //       header: {
-  //         'content-type': "application/json",
-  //         'Authorization': "Basic " + base64.base64_encode(username + ":" + password)
-  //       },
-  //       success: res => {
-  //         console.log(res);
-  //         if (res.statusCode !== 200) {
-  //           wx.showToast({
-  //             title: "仓库列表请求失败",
-  //             icon: "none",
-  //             duration: 2000
-  //           });
-  //           return;
-  //         };
-  //         let temArr = [];
-  //         res.data.forEach(ele => {
-  //           temArr.push(ele.name);
-  //         });
-  //         this.setData({
-  //           repositoryList: temArr
-  //         });
-  //       }
-  //     });
-  //   } else {
-  //     wx.showToast({
-  //       title: "请输入用户名和密码",
-  //       icon: "none",
-  //       duration: 2000
-  //     });
-  //   }
-  // },
-
-  // 捕获 repository 变化
-  // repositoryChange: function(e) {
-  //   this.setData({
-  //     repositoryIndex: e.detail.value
-  //   });
-  // },
-
   UserTypeChange2: function(e) {
     this.setData({
       userTypeListIndex2: e.detail.value
@@ -315,7 +263,7 @@ Page({
       if (this.data.TabCur == 0) {
         this.login(this.data.username, this.data.password, this.data.userTypeListIndex, 0);
       } else {
-        this.login(this.data.githubUsername, this.data.githubPassword, this.data.userTypeListIndex2, 1)  
+        this.login(this.data.githubUsername, this.data.githubPassword, this.data.userTypeListIndex2, 1)
       }
     }
   },
@@ -371,23 +319,20 @@ Page({
 
 
   // 生命周期函数--监听页面加载
-  onLoad: function() {
+  onLoad: function(options) {
     console.log("login.wxml 执行了 onLoad");
-    // if(app.globalData.header.Cookie != null) {
-
-
-    //   wx.switchTab({
-    //     url: '/pages/home/home',
-    //   })
-    // }
+    if (options.hasOwnProperty("back")) {
+      this.setData({
+        backPath: options.back
+      })
+    }
     if ((wx.getStorageSync("username") != null) && (wx.getStorageSync("password") != null)) {
       this.setData({
         defaultValue: wx.getStorageSync("username"),
         defaultValue2: wx.getStorageSync("password"),
-        username: wx.getStorageSync("username"),
-        password: wx.getStorageSync("password")
-      })
+        githubUsername: wx.getStorageSync("username"),
 
+      })
     }
 
   },

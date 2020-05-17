@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/group2/group2",
     "pages/login/login",
     "pages/home/home",
     "pages/subject/subject",
@@ -12,10 +13,14 @@
     "pages/addMember/addMember",
     "pages/mission/mission",
     "pages/me/me",
-    "pages/group2/group2",
     "pages/help/help",
     "pages/share/share",
-    "pages/groupDetail/groupDetail"
+    "pages/groupDetail/groupDetail",
+    "pages/taskDetail/taskDetail",
+    "pages/personal/personal",
+    "pages/statistic/statistic",
+    "pages/myTask/myTask",
+    "pages/report/report"
   ],
   "window": {
     "backgroundColor": "red",
@@ -47,32 +52,13 @@
     "van-picker": "/miniprogram_npm/@vant/weapp/picker/index",
     "van-dropdown-menu": "/miniprogram_npm/@vant/weapp/dropdown-menu/index",
     "van-dropdown-item": "/miniprogram_npm/@vant/weapp/dropdown-item/index",
+    "van-toast": "/miniprogram_npm/@vant/weapp/toast/index",
     "nav": "./pages/nav/nav"
   },
-  "tabBar": {
-    "color": "#dbdbdb",
-    "selectedColor": "#333",
-    "list": [
-      {
-        "pagePath": "pages/home/home",
-        "text": "Home",
-        "iconPath": "./images/gerencanshu.png",
-        "selectedIconPath": "./images/gerencanshu-2.png"
-      },
-      {
-        "pagePath": "pages/group/group",
-        "text": "group",
-        "iconPath": "./images/shujukanban.png",
-        "selectedIconPath": "./images/shujukanban-2.png"
-      },
-      {
-        "pagePath": "pages/index/index",
-        "text": "Blog",
-        "iconPath": "./images/liutongchaxun.png",
-        "selectedIconPath": "./images/liutongchaxun-2.png"
-      }
-    ]
-  },
+  
   "debug": true,
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "networkTimeout": {
+    "request": 20000
+  }
 }

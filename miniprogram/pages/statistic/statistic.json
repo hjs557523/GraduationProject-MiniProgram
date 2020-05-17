@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "ec-canvas": "../../ec-canvas/ec-canvas",
+    "van-divider": "../../miniprogram_npm/@vant/weapp/divider/index",
+      "van-tab": "../../miniprogram_npm/@vant/weapp/tab/index",
+      "van-tabs": "../../miniprogram_npm/@vant/weapp/tabs/index"
+  }
+}

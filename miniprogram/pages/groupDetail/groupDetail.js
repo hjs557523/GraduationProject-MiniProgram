@@ -3,6 +3,7 @@
 import { parseTime } from '../../utils/parseTime.js'
 import Dialog from '../../miniprogram_npm/@vant/weapp/dialog/dialog.js'
 import Notify from '../../miniprogram_npm/@vant/weapp/notify/notify.js'
+import Toast from '../../miniprogram_npm/@vant/weapp/toast/toast.js'
 
 const app = getApp();
 const base64 = require("../../utils/base64");
@@ -47,7 +48,7 @@ Page({
     console.log("groupDetail.wxml 执行了 onLoad");
     // 从app.js中获取用户信息
     this.setData({
-      userId : app.globalData.userId
+      userId : app.globalData.userId || wx.getStorageSync('userId')
     })
 
     this.setMonitor();
@@ -120,13 +121,14 @@ Page({
     const { groupInfo } = this.data;
     const userInfo = app.globalData.userInfo;
     const { groupTeacherName } = this.data;
-    console.log('小组id：' + groupInfo.gid);
+    console.log(userInfo);
+    console.log('小组id：' + groupInfo.groupId);
     console.log('用户名：' + userInfo.nickName);
     console.log('老师名：' + groupTeacherName);
     if(app.globalData.isEscape) {
       return {
         title: `${userInfo.nickName}邀你加入${groupTeacherName}老师创新实践班：【${groupInfo.groupName}】`,
-        path: `/pages/share/share?groupId=${groupInfo.gid}&inviter=${userInfo.nickName}&avatarUrl=${userInfo.avatarUrl}&groupName=${groupInfo.groupName}`,
+        path: `/pages/share/share?groupId=${groupInfo.groupId}&inviter=${userInfo.nickName}&avatarUrl=${userInfo.avatarUrl}&groupName=${groupInfo.groupName}`,
         imageUrl: getApp().globalData.imageUrl
       }
     }
@@ -189,17 +191,22 @@ Page({
         self.selectComponent("#new-bill-modal").stopLoading()
         return
       } else {
+        self.setData({
+          newTaskModal: false
+        })
         //执行添加任务操作
+        Toast.loading({
+          mask: true,
+          message: '正在提交并同步到GitHub中...',
+          duration: 0
+        })
         api.request('POST', '/student/task/addTask', app.globalData.header, {
           taskName: this.data.taskName,
           groupId: this.data.groupInfo.groupId
-        },true).then(res => {
+        },false).then(res => {
           if (res.code === 0) {
-            self.setData({
-              taskName: '',
-              newTaskModal: false
-            })
-
+            Toast.clear;
+            Toast.success('上传并同步成功!');
             // 重新请求该小组项目的所有任务/模块标题，更新界面
             api.request('GET', '/student/task/findAllTask', app.globalData.header, {
               groupId: self.data.groupInfo.groupId,
@@ -216,6 +223,8 @@ Page({
               }
             })
           } else {
+            Toast.clear;
+            Toast.fail('上传并同步失败');
             console.log("添加失败");
             self.setData({
               taskName: '',
@@ -240,7 +249,13 @@ Page({
   },
 
   deleteGroup() {
-
+    Dialog.confirm({
+      message: `确定要删除 ${this.data.groupInfo.groupName} 吗`,
+      selector: '#confirm-delete-group'
+    }).then(() => {
+      // 删除小组，小组成员，小组任务表，小组任务分解流程表
+      api.request()
+    })
   },
 
   leaveGroup() {
@@ -256,6 +271,22 @@ Page({
     })
 
   },
+
+
+
+
+
+  // 跳转到任务详情页面
+  goToTaskDetail(event) {
+    app.globalData.currentTask = event.currentTarget.dataset.bill;
+    console.log(app.globalData.currentTask);
+    wx.navigateTo({
+      url: '/pages/taskDetail/taskDetail',
+    })
+    
+  },
+
+
 
 
   /**
@@ -339,6 +370,8 @@ Page({
         groupMemberList.forEach(item => {
           if(item.name) {
             memberRemark[`${item.sid}`] = item.name
+          } else {
+            memberRemark[`${item.sid}`] = item.githubName
           }
         })
         app.globalData.currentGroupMemberList = groupMemberList;
@@ -364,6 +397,20 @@ Page({
 
     })    
     
+  },
+
+  showUserName(event) {
+    this.setData({
+      showAvatarMenu: true,
+      menuUser: event.currentTarget.dataset.user
+    })
+  },
+
+
+  closeDropGrouUser() {
+    this.setData({
+      showAvatarMenu: false
+    })
   }
 
 

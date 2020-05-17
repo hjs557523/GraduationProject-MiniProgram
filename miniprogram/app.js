@@ -5,11 +5,18 @@ import Notify from './miniprogram_npm/@vant/weapp/notify/notify';
 App({
   towxml: new Towxml(), //markdown解析渲染。创建towxml对象，供小程序页面使用
 
-  onLaunch: function() {
+  onLaunch: function(options) {
+    console.log(options);
     const self = this;
     // 查看主题设置
-    this.globalData.skin.index = wx.getStorageSync('skin') || 0
+    this.globalData.skin.index = wx.getStorageSync('skin') || 1
 
+    // 判断是否在审核期间
+    // const nowTime = Date.parse(new Date())
+    // if (nowTime < 1565078400000) { // 2019-08-06 16:00:00
+    //   this.globalData.isEscape = false
+    // }
+    
     // 获取手机信息以配置顶栏
     wx.getSystemInfo({
       success: res => {
@@ -17,18 +24,18 @@ App({
         this.globalData.navBarHeight = 44 + res.statusBarHeight
         this.globalData.screenWidth = res.screenWidth
       }
-    }) 
+    })
 
-    // 获取用户信息
+    this.globalData.shareParam = options.query 
+
+    // 查看是否授权 + 登录
     wx.getSetting({
       success: res => {
         if (res.authSetting['scope.userInfo']) {
           // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
           wx.getUserInfo({
             success: res => {
-              // 可以将 res 发送给后台解码出 unionId
               self.globalData.userInfo = res.userInfo
-
               // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
               // 所以此处加入 callback 以防止这种情况
               if (self.userInfoReadyCallback) {
@@ -36,7 +43,11 @@ App({
               }
             }
           })
-        }
+        } else {
+          wx.reLaunch({
+            url: `/pages/login/login?back=${options.path.split('/')[1]}`,
+          })
+        } 
       }
     })
 
@@ -48,7 +59,7 @@ App({
 
 
   setTheme(page) {
-    const storeTheme = wx.getStorageSync('theme') || 'yellow-skin'
+    const storeTheme = wx.getStorageSync('theme') || 'white-skin'
     page.setData({
       theme: storeTheme,
       selectType: storeTheme
@@ -68,36 +79,37 @@ App({
   // 全局
   globalData: {
 
-
     notify: {},//通知方法
-
     socketStatus: 'closed',
+    groupList: [],
     currentGroupInfo: null,
-    currentGroupUserList: [],
-    currentBill: null,
+    currentGroupMemberList: [],
+    currentTask: null,
     userInfo: null,
     shareParam: null,
     billId: '', // 用于展示结果的billid
     userInfoFromCloud: null,
-    userRemark: {},
+    memberRemark: {},
     statusBarHeight: 0,
     navBarHeight: 0,
     screenWidth: 0,
     isLoading: false,
     shareWord: function () {
-      return `你的同学${this.userInfo.nickName}在用这个创新实践课程管理小程序，你也来试试吧 `},
+      return `你的同学${this.userInfo.nickName}在用这个创新实践课程管理小程序，你也来试试吧 `
+      },
     sharePath: '/pages/group2/group2',
     imageUrl: 'https://s1.ax1x.com/2020/04/16/JF6Qqe.png',
     isEscape: true,
     teamid: 1,
     userId: null,
     userType: null,
+    username: null,
     openId: '',
     blog: '',
     isEscape: true,
     //自己维护一个header, 解决session过期问题
     header: {
-      'content-type': "application/x-www-form-urlencoded;charset=utf-8", //默认该请求方式为表单提交格式，纯json字符串格式则修改为: 'application/json; charset=UTF-8' 
+      'content-type': "application/x-www-form-urlencoded;charset=utf-8", //默认该请求方式为表单提交格式
       'x-requested-with': 'XMLHttpRequest', //默认该请求为ajax请求，没有该属性或修改该属性值为null，则表示为同步请求(普通请求)
       'Cookie': wx.getStorageSync('Cookies')
     },
@@ -106,7 +118,14 @@ App({
 
 
     header2: {
-      'content-type': "application/json;charset=utf-8", //默认该请求方式为表单提交格式，纯json字符串格式则修改为: 'application/json; charset=UTF-8' 
+      'content-type': "application/json;charset=utf-8", //纯json字符串格式则修改为: 'application/json; charset=UTF-8' 
+      'x-requested-with': 'XMLHttpRequest', //默认该请求为ajax请求，没有该属性或修改该属性值为null，则表示为同步请求(普通请求)
+      'Cookie': wx.getStorageSync('Cookies')
+    },
+
+
+    header3: {
+      'content-type': "multipart/form-data", //文件上传
       'x-requested-with': 'XMLHttpRequest', //默认该请求为ajax请求，没有该属性或修改该属性值为null，则表示为同步请求(普通请求)
       'Cookie': wx.getStorageSync('Cookies')
     },
@@ -193,7 +212,7 @@ App({
 
     // 打开信道
     wx.connectSocket({
-      url: "ws://" + "localhost" + ":8080/websocket/" + wx.getStorageSync('userId'),
+      url: "ws://" + "localhost" + ":8080/websocket/student" + wx.getStorageSync('userId'),
     })
   },
 

@@ -1,6 +1,8 @@
 const BASE_URL = 'http://localhost:8080';
 const app = getApp();
 
+import Toast from '../miniprogram_npm/@vant/weapp/toast/toast';
+
 function request(method, url, header, data = {},  loading = true) {
   return new Promise(function(resolve, reject) {
     if (loading) {
@@ -22,10 +24,11 @@ function request(method, url, header, data = {},  loading = true) {
         //console.log(res.data)
         if (res.data.code == 1001) { //当前用户已退出登录 或 用户session过期
           wx.showToast({
-            title: '登录失效',
+            title: '登录失效/未登录',
             icon: "none",
-            duration: 2000
+            duration: 3000
           })
+          console.log("登录失效")
           wx.redirectTo({
             url: '/pages/login/login',
           })
@@ -36,22 +39,25 @@ function request(method, url, header, data = {},  loading = true) {
       },
 
       fail: function(res) { //连接失败
+        console.log("网络出错")
         if (loading) {
           wx.hideLoading()
         }
         wx.showModal({
           title: '提示',
-          content: '网络连接失败',
+          content: '请求失败，请重试',
           showCancel: false,
         })
         reject()
         wx.hideLoading();
-        wx.redirectTo({
-          url: '/pages/login/login',
-        })
+        // wx.redirectTo({
+        //   url: '/pages/login/login',
+        // })
+        Toast.clear()
       },
 
-      complete: function(res) {},
+      complete: function(res) {
+      },
     })
   })
 }

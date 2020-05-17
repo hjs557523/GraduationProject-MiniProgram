@@ -76,7 +76,7 @@
     >
       <view class='public-item-name'>{{item.taskName}}<van-tag wx:if="{{true}}" plain type="default" style="margin-left: 20rpx;">{{item.student.name || item.student.githubName}}</van-tag></view>
       <view class='public-item-right'>
-        <text class='paid-total'>状态：{{item.finished === 0? '已完成':'进行中'}}</text>
+        <text class='paid-total'>状态：{{item.finished === 1? '已完成':'进行中'}}</text>
         <van-icon name="arrow" style='color: #C6C6C6;'/>
       </view>
     </view>
@@ -92,18 +92,18 @@
     show="{{ newTaskModal }}"
     show-cancel-button
     bind:close="callNewTask"
-    title="{{isEscape ? '小组' : '任务组'}}内新建任务/模块"
+    title="{{isEscape ? '小组' : '任务组'}}新建任务(ISSUE)"
     id="new-bill-modal"
   >
     <view class='bill-dialog-body' style='margin:50rpx 0;'>
       <van-field
         value="{{ taskName }}"
         label="任务名"
-        placeholder="请输入任务/模块名"
+        placeholder="请输入ISSUE标题"
         bind:change="onTaskNameChange"
       />
       <view class="new-tip">
-        一个较大的任务名或模块名，比如购物车模块，后续可进行任务/模块分解，分配成员执行。
+        一个较大的任务名或模块名，比如购物车模块，后续可进行任务/模块分解，分配成员执行。该信息会同步为仓库的一条issue
       </view>
     </view>
   </van-dialog>
@@ -114,16 +114,17 @@
 <van-dialog id="confirm-leave-group" />
 <van-notify id="new-task-notify" />
 <van-notify id="van-notify" />
+<van-toast id="van-toast" />
 
 <!-- 头像弹出层 -->
 <van-popup show="{{ showAvatarMenu }}" close-on-click-overlay="{{ true }}" bind:close="closeDropGrouUser" data-modal="hideModal" custom-style="border-radius: 20rpx;width: 70%;">
   <view class='menu-body'>
     <view class='user-info'>
-      <image style='width: 100rpx;height: 100rpx;border-radius: 50%;' src='{{menuUser.avatarUrl}}'></image>
-      <view><van-tag color="#7232dd" plain>{{groupInfo.createBy.openId === menuUser.openId ? '组长' : '组员'}}</van-tag></view>
-      <view wx:if="{{userInfoFromCloud.openId === menuUser.openId}}" style='font-size:30rpx;margin-bottom:20rpx;margin-top:11rpx;'>
+      <image style='width: 100rpx;height: 100rpx;border-radius: 50%;' src='{{menuUser.picImg}}'></image>
+      <view><van-tag color="#7232dd" plain>{{groupInfo.ownerId === menuUser.sid ? '组长' : '组员'}}</van-tag></view>
+      <view wx:if="{{userId === menuUser.sid}}" style='font-size:30rpx;margin-bottom:20rpx;margin-top:11rpx;'>
         <van-field
-            placeholder="输入新备注"
+            placeholder="备注姓名"
             center
             border="{{ true }}"
             use-button-slot
@@ -132,9 +133,9 @@
           <van-button slot="button" size="small" type="primary" bindtap='updateNote' loading="{{loadingUpdateNote}}">确定</van-button>
         </van-field>
       </view>
-      <view wx:if="{{userInfoFromCloud.openId !== menuUser.openId}}" style='font-size:30rpx;margin-bottom:20rpx;margin-top:11rpx;'>{{ menuUser.note || menuUser.nickName }}</view>
+      <view wx:if="{{userId !== menuUser.sid}}" style='font-size:30rpx;margin-bottom:20rpx;margin-top:11rpx;'>{{ menuUser.name || menuUser.githubName }}</view>
     </view>
-    <button class='btn btn-danger' bindtap='dropGrouUser' wx:if="{{groupInfo.createBy.openId === userInfoFromCloud.openId && menuUser.openId !== groupInfo.createBy.openId}}">移出群组</button>
+    <button class='btn btn-danger' bindtap='dropGrouUser' wx:if="{{groupInfo.ownerId === userId && menuUser.sid !== groupInfo.ownerId}}">移出群组</button>
     <button class='btn btn-default' bindtap='closeDropGrouUser'>取消</button>
   </view>
 </van-popup>

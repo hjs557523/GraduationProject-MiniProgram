@@ -2,26 +2,53 @@
 <nav class="nav-instance" my-class="{{theme}}-set-bg" my-icon-class="{{theme}}-set-icon-bg" showIcons="{{['home']}}"></nav>
 
 <view class="group-body" id="{{theme}}">
+
   <view class='public-list'>
-    <view class='public-header'>
+    <view class='public-header2'>
       <image class='public-icon' src="../../images/group.png"></image>
-      我的{{isEscape ? '小组' : '任务'}}
+      常用功能
     </view>
-    <view
-      class='public-item {{index === 0 ? "top" : ""}} {{index === groupList.length - 1 ? "public-item-bottom" : ""}}'
-      wx:for="{{groupList}}"
-      wx:key="index"
-      bindtap='goToGroupDetail'
-      data-group="{{item}}"
-    >
-      <view class='public-item-name'>{{item.groupName}}</view>
-      <view style="display:flex;align-items:center;">
-        <image src='{{item.avatar}}' class='creater'></image>
-        <van-icon name="arrow" style='color: #C6C6C6;display: flex;'/>
+    <view class='handle-basic addHeight'>
+      <view class="handle-one" bindtap='myProcess'>
+        <image class='handle-icon2' src="../../images/todo3.png"></image>
+        <text>个人待办</text>
+      </view>
+      <view class="handle-one" bindtap='onStatistic' data-isend="N">
+        <image class='handle-icon2' src="../../images/tongji.png"></image>
+        <text>工作统计</text>
+      </view>
+
+
+      <view class="handle-one" bindtap='onNotify'>
+        <!-- <image class='handle-icon2' src="../../images/notify.png"></image> -->
+        <!-- <van-icon name="chat" info="9" size="27px" color="pink" /> -->
+        <van-icon name="chat" size="27px" color="pink" />
+        <text>消息订阅</text>
+      </view>
+      <view class="handle-one" bindtap='onReport'>
+        <image class='handle-icon2' src="../../images/week.png"></image>
+        <text>周报汇报</text>
       </view>
     </view>
   </view>
+
+  <view class='public-list'>
+    <view class='public-header'>
+      <image class='public-icon' src="../../images/group.png"></image>
+      我的团队
+    </view>
+    <view class='public-item {{index === 0 ? "top" : ""}} {{index === groupList.length - 1 ? "public-item-bottom" : ""}}' wx:for="{{groupList}}" wx:key="index" bindtap='goToGroupDetail' data-group="{{item}}">
+      <view class='public-item-name'>{{item.groupName}}</view>
+      <view style="display:flex;align-items:center;">
+        <image src='{{item.avatar}}' class='creater'></image>
+        <van-icon name="arrow" style='color: #C6C6C6;display: flex;' />
+      </view>
+    </view>
+  </view>
+
+
 </view>
+
 
 <!-- <van-dialog id="van-dialog" /> -->
 <!-- 新增群组弹层 -->
@@ -56,12 +83,17 @@
 </van-dialog> -->
 <!-- <van-notify id="notify-selector" /> -->
 
-<van-action-sheet round='false' show="{{ showAddGroupSheet }}" title="新建小组" bind:close='closeAddGroupSheet'> 
+
+
+
+<van-action-sheet round='false' show="{{ showAddGroupSheet }}" title="新建小组" bind:close='closeAddGroupSheet'>
   <view class='sheet-body'>
     <van-field value="{{ groupName }}" clearable label="小组名称" placeholder="请输入小组名称" bind:change="addGroupNameInput" required data-field="title" />
     <van-field value="{{ repositoryUrl }}" clearable label="项目地址" placeholder="请输入项目的github地址" bind:change="addRepositoryUrlInput" required data-field="title" />
-    <van-cell title="课题选择" value="" border="{{ false }}"/>
-    <van-picker columns="{{ subjectNameList }}" bind:change="onChange" value-key=""  default-index="{{ 2 }}"  visible-item-count='{{ 4 }}'/>
+    <van-cell title="课题选择" value="" border="{{ false }}" />
+    <van-picker columns="{{ subjectNameList }}" bind:change="onChange" value-key="" default-index="{{ 2 }}" visible-item-count='{{ 4 }}' />
     <button class='btn btn-primary' bindtap="addGroup">点击创建</button>
   </view>
 </van-action-sheet>
+
+<van-toast id="tongzhi" />

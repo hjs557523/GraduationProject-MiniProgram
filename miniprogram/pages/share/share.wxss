@@ -1,5 +1,5 @@
 /* miniprogram/pages/share/share.wxss */
-@import "/colorui.wxss";
+/* @import "/colorui.wxss"; */
 
 #yellow-skin {
   background-color: rgb(255, 232, 59);

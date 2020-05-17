@@ -130,6 +130,41 @@
 					"id": -1,
 					"name": "pages/groupDetail/groupDetail",
 					"pathName": "pages/groupDetail/groupDetail",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/taskDetail/taskDetail",
+					"pathName": "pages/taskDetail/taskDetail",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/statistic/statistic",
+					"pathName": "pages/statistic/statistic",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/myTask/myTask",
+					"pathName": "pages/myTask/myTask",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/report/report",
+					"pathName": "pages/report/report",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/personal/personal",
+					"pathName": "pages/personal/personal",
 					"scene": null
 				}
 			]

@@ -1,0 +1,55 @@
+<nav class="nav-instance" my-class="{{theme}}-set-bg" my-icon-class="{{theme}}-set-icon-bg" showIcons="{{['back']}}"></nav>
+
+<view class="group-body" id="{{theme}}">
+  <view class='public-list'>
+    <view class='public-header2'>
+      <image class='public-icon' src="../../images/group.png"></image>
+      本周工作（必填）
+    </view>
+    <textarea placeholder='请写下本周工作内容~' maxlength='-1' bindinput="getThisWeek" value="{{ thisWeekContent }}"></textarea>
+  </view>
+
+  <view class='public-list'>
+    <view class='public-header2'>
+      <image class='public-icon' src="../../images/group.png"></image>
+      下周计划（必填）
+    </view>
+    <textarea placeholder='请写下下周的工作计划~' maxlength='-1'bindinput="getNextWeek" value="{{ nextWeekContent }}"></textarea>
+  </view>
+
+  <view class='public-list'>
+    <view class='public-header2'>
+      <image class='public-icon' src="../../images/group.png"></image>
+      添加附件（可选）
+    </view>
+    <view class="upload">
+      <van-uploader file-list="{{ fileList }}" max-count="1" bind:after-read="afterRead" bind:delete="deleteTempFile" accept="all" />
+    </view>
+  </view>
+
+  <view class='public-list'>
+    <view class='reportTo'>
+      <van-cell title="汇报对象" is-link bind:click="showActionSheet" value='{{ teacher.name }}'/>
+    </view>
+  </view>
+
+
+
+  <view class="finishbutton">
+    <van-button type="primary" block bind:click="addWeekPaper">提交</van-button>
+  </view>
+
+</view>
+
+<van-toast id="van-toast" />
+<van-notify id="van-notify" />
+<van-notify id="bill-delete-selector" />
+<van-dialog id="confirm-delete-bill" />
+<van-dialog id="confirm-delete-word" />
+<van-dialog id="van-dialog" />
+<van-action-sheet
+  show="{{ show }}"
+  actions="{{ actions }}"
+  bind:close="onClose"
+  bind:select="onSelect"
+/>

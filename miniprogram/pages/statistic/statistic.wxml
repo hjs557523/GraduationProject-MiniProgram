@@ -1,0 +1,139 @@
+<!--miniprogram/pages/statistic/statistic.wxml-->
+<nav class="nav-instance" my-class="{{theme}}-set-bg" my-icon-class="{{theme}}-set-icon-bg" showIcons="{{['back']}}"></nav>
+
+<view class="container">
+  <view class="nav">
+
+    <view class="nav-son borders {{shownavindex == 2? 'active' : ''}}" bindtap="list" data-nav="2">
+      <view class="content">选择当前队伍</view>
+      <view class="icon" style="color:#fff"></view>
+    </view>
+    <!-- <view class="nav-son {{shownavindex == 3? 'active' : ''}}" bindtap="listpx" data-nav="3">
+      <view class="content">nav2</view>
+      <view class="icon" style="color:#fff"></view>
+    </view> -->
+  </view>
+
+  <view class="temp temp2 contentCenter {{nzopen ? 'slidown' : 'slidup'}} {{nzshow ? 'disappear':''}}">
+    <view wx:for="{{watchList}}" wx:key="index" bindtap='selectWatch' data-index="{{index}}" data-group="{{item}}" class="pxTable {{watchIndex == index?'current4':''}}">
+      {{item.groupName}}
+    </view>
+  </view>
+
+  <!-- <view class="temp temp2 contentCenter {{pxopen ? 'slidown' : 'slidup'}} {{pxshow ? 'disappear':''}}">
+    <view wx:for="{{padContent}}" wx:key="index" bindtap='selectPad' data-index="{{index}}" class="pxTable {{pdIndex == index?'current4':''}}">
+      {{item}}
+    </view>
+  </view> -->
+
+
+  <view class="card" wx:if="{{watchList.length !== 0}}">
+    <view class="card-title">
+      <view class="card-title-item title-text">
+        任务统计
+      </view>
+    </view>
+    <!-- <van-divider contentPosition="center" custom-style='margin:30rpx 20rpx 0'>成员排序</van-divider> -->
+    <view class="card-body">
+      <view class="brand-data" wx:for="{{activeDtaArray}}" wx:key="index" wx:for-item="item">
+        <view class="brand-item">
+          <view class="brand-img">
+            <image src="{{ item.avatar }}"></image>
+          </view>
+          <view class="brand-text">
+            <view class="brand-left">
+              <view>
+                <view class="black-horse">{{ item.name }}</view>({{item.githubName}})</view>
+              <view>完成任务数
+                <text class="font-red">{{ item.finish }}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+        <!-- <view class="brand-item">
+          <view class="brand-img">
+            <image src="../../img/pr1.svg"></image>
+          </view>
+          <view class="brand-text">
+            <view class="brand-left">
+
+              <view>
+                <view class="black-horse">测试号</view>(daotaWEI)</view>
+              <view>参与任务数
+                <text class="font-red">12</text>
+              </view>
+            </view>
+          </view>
+        </view> -->
+      </view>
+      <van-divider contentPosition="center" custom-style='margin:30rpx 20rpx 0'>列表详情</van-divider>
+      <view class="table">
+        <view class="tr">
+          <view class="th th1">学号</view>
+          <view class="th th2">真实姓名</view>
+          <view class="th th3">github</view>
+          <view class="th th4">参与任务</view>
+        </view>
+        <view class="tr" wx:for="{{activeDtaArray}}" wx:key="idx" wx:for-item="item">
+          <view class="td td1">{{item.studentId}}</view>
+          <view class="td td2">{{item.name}}</view>
+          <view class="td td3">{{item.githubName}}</view>
+          <view class="td td4">{{item.count}}</view>
+        </view>
+      </view>
+    </view>
+
+  </view>
+
+  <view class="card" wx:if="{{watchList.length === 0}}">
+    <view class="card-title2">
+      <view class="card-title-item title-text">
+        您当前没有任何队伍信息!
+      </view>
+    </view>
+    <!-- <view class="card-body">
+      <view class="brand-data">
+        <view class="brand-item">
+          <view class="brand-img">
+            <image src="../../images/github.jpg"></image>
+          </view>
+          <view class="brand-text">
+            <view class="brand-left">
+            </view>
+          </view>
+        </view>
+      </view>
+    </view> -->
+
+  </view>
+
+
+  <view class="card" wx:if="{{watchList.length !== 0}}">
+    <view class="card-title">
+      <view class="card-title-item title-text">
+        代码统计
+      </view>
+    </view>
+    <van-tabs type="line" active="{{ active }}" border="false" bind:change="onChange">
+      <van-tab title="commit次数统计">
+      </van-tab>
+      <van-tab title="提交代码量统计">
+      </van-tab>
+    </van-tabs>
+    <view class="card-body">
+      <view class="echart">
+        <ec-canvas id="mychart-dom-bar" canvas-id="chart-pie" ec="{{ ec }}"></ec-canvas>
+      </view>
+    </view>
+    <van-divider contentPosition="center" custom-style='margin:30rpx 20rpx 0'>毎周提交代码统计</van-divider>
+    <view class="card-body">
+      <view class="echart">
+        <ec-canvas id="mychart-dom-bar" canvas-id="mychart-bar" ec="{{ ec2 }}"></ec-canvas>
+      </view>
+    </view>
+
+
+
+  </view>
+</view>
+<van-toast id="van-toast" />

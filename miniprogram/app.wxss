@@ -6,14 +6,15 @@
 @import "style/purple.wxss";
 .public-list {
   width:90%;
-  margin:0 auto 20rpx;
-  border-radius:20rpx;
+  margin:0 auto 30rpx;
+  border-radius:20rpx !important;
 }
 .public-header {
   padding:30rpx 20rpx;
   font-size:39rpx;
   display: flex;
   align-items: center;
+
 }
 .public-icon {
   margin-right: 18rpx;
@@ -37,8 +38,8 @@
 .public-item-name {
   font-size: 34rpx;
   color: #313131;
-  max-width: 400rpx;
-  font-weight: bold;
+  /* max-width: 400rpx; */
+  font-weight: 600;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -105,7 +106,7 @@
 .handle-one text {
   text-align:center;
   font-size:26rpx;
-  margin-top:4rpx;
+  margin-top:10rpx;
 }
 .new-tip {
   width:70%;

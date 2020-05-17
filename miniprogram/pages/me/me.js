@@ -9,16 +9,33 @@ Page({
    * 页面的初始数据
    */
   data: {
+    backPath: '',
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
     ColorList: app.globalData.ColorList,
     isFlag: false,
     isFlag2: false,
     isFlag3: false,
+    isFlag4: false,
     username: '',
     password: '',
     confirmPassword: '',
+    name: '',
 
+  },
+
+  checkname: function(e) {
+    var that = this;
+    if (util.strIsEmpty(e.detail.value)) {
+      that.setData({
+        isFlag4: true,
+      })
+    } else {
+      that.data.name = e.detail.value;
+      that.setData({
+        isFlag4: false,
+      })
+    }
   },
 
 
@@ -76,31 +93,37 @@ Page({
   bindAccount() {
     if (util.strIsEmpty(this.data.username)){
       this.setData({
-        isFlag:true,
+        isFlag: true,
       })
     } else if (util.strIsEmpty(this.data.password)) {
       this.setData({
-        isFlag2:true,
+        isFlag2: true,
       })
     } else if (util.strIsEmpty(this.data.confirmPassword)) {
       this.setData({
-        isFlag3:true
+        isFlag3: true
       })
     } else if (this.data.confirmPassword != this.data.password) {
       this.setData({
-        isFlag3:true
+        isFlag3: true
+      })
+    } else if (util.strIsEmpty(this.data.name)) {
+      this.setData({
+        isFlag4: true
       })
     } else {
       var that = this;
       console.log("学号/工号：" + this.data.username);
       console.log("密码：" + this.data.password);
       console.log("确认密码：" + this.data.confirmPassword);
+      console.log("真实姓名:" + this.data.name);
       wx.showLoading({
         title: '绑定中...',
       })
       api.request('POST', '/wx/githubBinding', app.globalData.header, {
         username: that.data.username,
         password: that.data.password,
+        name: that.data.name
       }, false).then(res => {
         wx.hideLoading();
         if (res.code == 0) {
@@ -113,7 +136,11 @@ Page({
             duration: 3000
           })
 
-          // 跳转到主界面
+          // 跳转到主界面 或 加入小组界面
+          wx.redirectTo({
+            url: `${backPath === '' ? '/pages/group2/group2' : `/pages/${backPath}/${backPath}`}`,
+          })
+
         } else {
           wx.showToast({
             title: '绑定失败',
@@ -139,7 +166,11 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    if (options.hasOwnProperty("back")) {
+      this.setData({
+        backPath: options.back
+      })
+    }
   },
 
   /**

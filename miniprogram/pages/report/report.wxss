@@ -1,5 +1,4 @@
-/* miniprogram/pages/group2/group2.wxss */
-
+/* miniprogram/pages/report/report.wxss */
 .group-body {
   width: 100%;
   height: 100vh;
@@ -67,5 +66,34 @@
   display: flex;
   align-items: center;
   border-bottom: 3rpx solid #F2F2F2;
+}
+
+.reportTo {
+  font-size:39rpx;
+  align-items: center;
+  border-bottom: 3rpx solid #F2F2F2;
+}
+
+textarea {
+  background-color: white;
+  width: 85%;
+  height: 300rpx;
+  padding: 20rpx;
+  margin: auto;
+  margin-top: 10rpx;
+  border-radius: 30rpx;
+  font-size: 30rpx;
+}
+
+.upload {
+  background-color: white;
+  padding: 30rpx;
+  
+}
+
+.finishbutton {
+  margin: 50rpx 60rpx;
+  bottom: 0;
+  width: 630rpx;
 }
 

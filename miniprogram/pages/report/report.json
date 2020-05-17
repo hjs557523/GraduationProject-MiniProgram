@@ -1,0 +1,12 @@
+{
+  "usingComponents": {
+    "van-divider": "../../miniprogram_npm/@vant/weapp/divider/index",
+    "van-tab": "../../miniprogram_npm/@vant/weapp/tab/index",
+    "van-tabs": "../../miniprogram_npm/@vant/weapp/tabs/index",
+    "van-uploader": "../../miniprogram_npm/@vant/weapp/uploader/index",
+    "van-popup": "../../miniprogram_npm/@vant/weapp/popup/index",
+    "van-dropdown-menu": "../../miniprogram_npm/@vant/weapp/dropdown-menu/index",
+    "van-dropdown-item": "../../miniprogram_npm/@vant/weapp/dropdown-item/index",
+    "van-action-sheet": "../../miniprogram_npm/@vant/weapp/action-sheet/index"
+  }
+}

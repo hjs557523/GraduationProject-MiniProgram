@@ -20,7 +20,8 @@
 
 
 <view class='page'>
-  <van-field value="{{ username }}" label="学号/工号" clickable clearable left-icon="manager" input-align="right" placeholder="输入学号或工号" error-message = "{{isFlag==true?'学号/工号格式错误':''}}" bindblur='checkUsername'/>
+  <van-field value="{{ username }}" label="学号" clickable clearable left-icon="manager" input-align="right" placeholder="输入学号" error-message = "{{isFlag==true?'学号格式错误':''}}" bindblur='checkUsername'/>
+  <van-field value="{{ name }}" label="姓名" clickable clearable left-icon="manager" input-align="right" placeholder="输入姓名" error-message = "{{isFlag4==true?'姓名不能为空':''}}" bindblur='checkname'/>
   <van-field value="{{ password }}" label="密码" clickable clearable  left-icon="lock" input-align="right" placeholder="输入教务系统密码" bindblur='checkPassword'  type="password" error-message = "{{ isFlag2==true?'密码仅支持字母和数字组合':'' }}"/>
     <van-field value="{{ confirmPassword }}" label="确认密码" clickable clearable left-icon="lock" input-align="right" placeholder="再次确认密码" bindblur='checkconfirmPassword'  type="password" error-message = "{{ isFlag3==true?'两次密码不一致！':'' }}"/>
   <view style='height:80rpx'></view>
